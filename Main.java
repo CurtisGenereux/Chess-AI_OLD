@@ -26,8 +26,8 @@ public class Main {
 		}
 		
 		JFrame frame = new JFrame();
-		frame.setBounds(10, 10, 512, 512);
-        frame.setLocationRelativeTo(null);
+		frame.setSize(512, 512);
+        	frame.setLocationRelativeTo(null);
 		JPanel panel = new JPanel() {
 			
 			@Override
@@ -35,9 +35,9 @@ public class Main {
 				
 				boolean white = true; // or baishe
 				
-                int boardSize = tileSize * 8;
-                int startX = (getWidth() - boardSize) / 2;
-                int startY = (getHeight() - boardSize) / 2;
+				int boardSize = tileSize * 8;
+				int startX = (getWidth() - boardSize) / 2;
+				int startY = (getHeight() - boardSize) / 2;
 				
 				for (int i = 0; i < 8; i++) {
 					for (int j = 0; j < 8; j++) {
