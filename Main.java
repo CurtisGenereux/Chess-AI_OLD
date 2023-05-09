@@ -28,12 +28,12 @@ public class Main {
 		JFrame frame = new JFrame();
 		frame.setSize(512, 512);
         	frame.setLocationRelativeTo(null);
+        
 		JPanel panel = new JPanel() {
-			
-			@Override
+		
 			public void paint(Graphics g) {
 				
-				boolean white = true; // or baishe
+				boolean isLightTile = true;
 				
 				int boardSize = tileSize * 8;
 				int startX = (getWidth() - boardSize) / 2;
@@ -41,16 +41,16 @@ public class Main {
 				
 				for (int i = 0; i < 8; i++) {
 					for (int j = 0; j < 8; j++) {
-						if (white) {
+						if (isLightTile) {
 							g.setColor(baishe);
 						} else {
 							g.setColor(brown);
 						}
 						
 						g.fillRect(startX + j * tileSize, startY + i * tileSize, tileSize, tileSize);
-						white=!white; // if (white == false) => true; (else) => true;
+						isLightTile=!isLightTile; // if (white == false) => true; (else) => true;
 					}
-					white=!white;  // alternate for checker pattern;
+					isLightTile=!isLightTile;  // alternate for checker pattern;
 				}
 			}
 		};
