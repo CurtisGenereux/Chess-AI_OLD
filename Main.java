@@ -13,25 +13,23 @@ public class Main {
 		Color brown = new Color (169, 129, 97);
 		
 		// grab user resolution
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		double width = screenSize.getWidth();
-		double height = screenSize.getHeight();
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();	
+		int height = screenSize.height;
+		int width = screenSize.width;
 		
-		int tileSize;
-		
-		if (width < 1920 || height < 1080) {
-			tileSize = 64;
-		} else {
-			tileSize = 128; // >1080p => 128px;
-		}
+		int tileSize = (int) Math.round(height*0.1);
 		
 		JFrame frame = new JFrame();
-		frame.setSize(512, 512);
+		frame.setSize(tileSize*8, tileSize*8);
         	frame.setLocationRelativeTo(null);
         
 		JPanel panel = new JPanel() {
 		
 			public void paint(Graphics g) {
+				
+				Color backgroundColor = new Color(255, 251, 240);
+				g.setColor(backgroundColor);
+				g.fillRect(0, 0, width, height);
 				
 				boolean isLightTile = true;
 				
