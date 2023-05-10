@@ -20,7 +20,7 @@ public class Main {
 		int tileSize = (int) Math.round(height*0.1);
 		
 		JFrame frame = new JFrame();
-		frame.setSize(tileSize*8, tileSize*8);
+		frame.setSize(tileSize*8+16, tileSize*8+32);
         	frame.setLocationRelativeTo(null);
         
 		JPanel panel = new JPanel() {
