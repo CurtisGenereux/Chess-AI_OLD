@@ -6,24 +6,22 @@ public class Piece {
 	
 	int xPosition;
 	int yPosition;
-	boolean isLightTile;
-	LinkedList<Piece> ps;
+	LinkedList<Piece> pieces;
 	String name;
 	
-	public Piece(int xPosition, int yPosition, String n, LinkedList<Piece> ps) {
+	public Piece(int xPosition, int yPosition, String name, LinkedList<Piece> pieces) {
 		
 		this.xPosition = xPosition;
 		this.yPosition = yPosition;
-		this.isLightTile = isLightTile;
-		this.ps = ps;
-		name = n;
-		ps.add(this);
+		this.pieces = pieces;
+		this.name = name;
+		pieces.add(this);
 		
 	}
 	
 	public void move(int xPosition, int yPosition) {
 		
-		for (Piece piece: ps) {
+		for (Piece piece: pieces) {
 			if ((piece.xPosition == xPosition) && (piece.yPosition == yPosition)) {
 				piece.kill();
 				
@@ -37,7 +35,7 @@ public class Piece {
 	}
 	
 	public void kill() {
-		ps.remove(this);
+		pieces.remove(this);
 		
 	}
 }
