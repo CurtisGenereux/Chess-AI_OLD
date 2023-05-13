@@ -11,6 +11,42 @@ import java.util.LinkedList;
 
 public class Main {
 	
+    public static Image[] images;
+    
+    public static Image assignPieces(Piece piece) {
+        if (piece.name.equalsIgnoreCase("white-pawn")) {
+            return images[0];
+        } else if (piece.name.equalsIgnoreCase("white-knight-left")) {
+            return images[1];
+        } else if (piece.name.equalsIgnoreCase("white-knight-right")) {
+            return images[2];
+        } else if (piece.name.equalsIgnoreCase("white-rook")) {
+            return images[3];
+        } else if (piece.name.equalsIgnoreCase("white-bishop")) {
+            return images[4];
+        } else if (piece.name.equalsIgnoreCase("white-queen")) {
+            return images[5];
+        } else if (piece.name.equalsIgnoreCase("white-king")) {
+            return images[6];
+        } else if (piece.name.equalsIgnoreCase("black-pawn")) {
+            return images[7];
+        } else if (piece.name.equalsIgnoreCase("black-knight-left")) {
+            return images[8];
+        } else if (piece.name.equalsIgnoreCase("black-knight-right")) {
+            return images[9];
+        } else if (piece.name.equalsIgnoreCase("black-bishop")) {
+            return images[10];
+        } else if (piece.name.equalsIgnoreCase("black-rook")) {
+            return images[11];
+        } else if (piece.name.equalsIgnoreCase("black-queen")) {
+            return images[12];
+        }  else if (piece.name.equalsIgnoreCase("black-king")) {
+            return images[13];
+        } else {
+    		return null;
+        }
+    }
+	
 	public static void main(String[] args) {
 
 		LinkedList<Piece> pieces = new LinkedList<>();
@@ -22,28 +58,13 @@ public class Main {
 		
 		// board should be 80% of the screen
 		int tileSize = (int) Math.round(height*0.1);
-
-		ImageLoader imageLoader = new ImageLoader();
-		Image images[]=new Image[14];
 		
-		// load all images into the array
-		images[0] = imageLoader.loadImage("white-pawn", tileSize);
-		images[1] = imageLoader.loadImage("white-knight-left", tileSize);
-		images[2] = imageLoader.loadImage("white-knight-right", tileSize);
-		images[3] = imageLoader.loadImage("white-rook", tileSize);
-		images[4] = imageLoader.loadImage("white-bishop", tileSize);
-		images[5] = imageLoader.loadImage("white-queen", tileSize);
-		images[6] = imageLoader.loadImage("white-king", tileSize);
-		images[7] = imageLoader.loadImage("black-pawn", tileSize);
-		images[8] = imageLoader.loadImage("black-knight-left", tileSize);
-		images[9] = imageLoader.loadImage("black-knight-right", tileSize);
-		images[10] = imageLoader.loadImage("black-rook", tileSize);
-		images[11] = imageLoader.loadImage("black-bishop", tileSize);
-		images[12] = imageLoader.loadImage("black-queen", tileSize);
-		images[13] = imageLoader.loadImage("black-king", tileSize);
-
 		Piece[][] board = new Piece[8][8];
+		
+		ImageLoader imageLoader = new ImageLoader();
+		images = new Image[14];
 	
+		// asign pieces
 		for (int i = 0; i < 8; i++) {
 		    Piece blackPawn = new Piece(i, 1, "black-pawn", pieces);
 		    Piece whitePawn = new Piece(i, 6, "white-pawn", pieces);
@@ -52,7 +73,7 @@ public class Main {
 		}
 		
 		String[] pieceNames = {"rook", "knight-right", "bishop", "queen", "king", "bishop", "knight-left", "rook"};
-
+		
 		for (int i = 0; i < 8; i++) {
 		    Piece blackPiece = new Piece(i, 0, "black-" + pieceNames[i], pieces);
 		    Piece whitePiece = new Piece(i, 7, "white-" + pieceNames[i], pieces);
@@ -60,6 +81,18 @@ public class Main {
 		    board[i][7] = whitePiece;
 		}
 		
+		// load piece images
+		String[] uniquePieceNames = {"pawn", "rook", "knight-left", "knight-right", "bishop", "queen", "king"};
+		
+		for (int i = 0; i < 7; i++) {
+			images[i] = imageLoader.loadImage("black-" + uniquePieceNames[i], tileSize);
+		}
+		int imageIndex = 0;
+		for (int i = 7; i < 14; i++) {
+			images[i] = imageLoader.loadImage("white-" + uniquePieceNames[imageIndex], tileSize);
+			imageIndex++;
+		}
+
 		Color baishe = new Color (241, 216, 179); // -50, -0, -25;
 		Color brown = new Color (169, 129, 97); // - 50, -0, -25;
 		
@@ -91,42 +124,11 @@ public class Main {
 				}
 				
 				for (Piece piece: pieces) {
-					int imageIndex = 0;
-					
-					if (piece.name.equalsIgnoreCase("white-pawn")) {
-						imageIndex = 0;
-					} else if (piece.name.equalsIgnoreCase("white-knight-left")) {
-						imageIndex = 1;
-					} else if (piece.name.equalsIgnoreCase("white-knight-right")) {
-						imageIndex = 2;
-					} else if (piece.name.equalsIgnoreCase("white-rook")) {
-						imageIndex = 3;
-					}  else if (piece.name.equalsIgnoreCase("white-bishop")) {
-						imageIndex = 4;
-					}  else if (piece.name.equalsIgnoreCase("white-queen")) {
-						imageIndex = 5;
-					}  else if (piece.name.equalsIgnoreCase("white-king")) {
-						imageIndex = 6;		
-					}  else if (piece.name.equalsIgnoreCase("black-pawn")) {
-						imageIndex = 7;
-					}  else if (piece.name.equalsIgnoreCase("black-knight-left")) {
-						imageIndex = 8;
-					}  else if (piece.name.equalsIgnoreCase("black-knight-right")) {
-						imageIndex = 9;
-					}  else if (piece.name.equalsIgnoreCase("black-rook")) {
-						imageIndex = 10;
-					} 	else if (piece.name.equalsIgnoreCase("black-bishop")) {
-						imageIndex = 11;
-					} else if (piece.name.equalsIgnoreCase("black-queen")) {
-						imageIndex = 12;
-					} else if (piece.name.equalsIgnoreCase("black-king")) {
-						imageIndex = 13;
-					}
 					
 					int Xpiece = startX + piece.xPosition * tileSize;
 			        int Ypiece = startY + piece.yPosition * tileSize;
 					
-			        g.drawImage(images[imageIndex], Xpiece, Ypiece, this);
+			        g.drawImage(assignPieces(piece), Xpiece, Ypiece, this);
 				}
 			}
 		};
