@@ -34,9 +34,9 @@ public class Main {
             return images[8];
         } else if (piece.name.equalsIgnoreCase("black-knight-right")) {
             return images[9];
-        } else if (piece.name.equalsIgnoreCase("black-bishop")) {
-            return images[10];
         } else if (piece.name.equalsIgnoreCase("black-rook")) {
+            return images[10];
+        } else if (piece.name.equalsIgnoreCase("black-bishop")) {
             return images[11];
         } else if (piece.name.equalsIgnoreCase("black-queen")) {
             return images[12];
@@ -48,8 +48,6 @@ public class Main {
     }
 	
 	public static void main(String[] args) {
-
-		LinkedList<Piece> pieces = new LinkedList<>();
 		
 		// grab user resolution
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();	
@@ -59,6 +57,8 @@ public class Main {
 		// board should be 80% of the screen
 		int tileSize = (int) Math.round(height*0.1);
 		
+		// define piece lsit and board;
+		LinkedList<Piece> pieces = new LinkedList<>();
 		Piece[][] board = new Piece[8][8];
 		
 		ImageLoader imageLoader = new ImageLoader();
@@ -82,7 +82,7 @@ public class Main {
 		}
 		
 		// load piece images
-		String[] uniquePieceNames = {"pawn", "rook", "knight-left", "knight-right", "bishop", "queen", "king"};
+		String[] uniquePieceNames = {"pawn", "knight-left", "knight-right", "rook", "bishop", "queen", "king"};
 		
 		for (int i = 0; i < 7; i++) {
 			images[i] = imageLoader.loadImage("black-" + uniquePieceNames[i], tileSize);
@@ -98,20 +98,20 @@ public class Main {
 		
 		JFrame frame = new JFrame();
 		frame.setSize(tileSize*8+16, tileSize*8+38); // y axis is larger because of tab
-        frame.setLocationRelativeTo(null);
+        	frame.setLocationRelativeTo(null);
         
 		JPanel panel = new JPanel() {
 		
 			public void paint(Graphics g) {
 				
 				Color backgroundColor = new Color(255, 251, 240);
-		        g.setColor(backgroundColor);
-		        g.fillRect(0, 0, width, height);
-				
+				g.setColor(backgroundColor);
+				g.fillRect(0, 0, width, height);
+
 				int boardSize = tileSize * 8;
 				int startX = (getWidth() - boardSize) / 2;
 				int startY = (getHeight() - boardSize) / 2;
-				
+
 				for (int x = 0; x < 8; x++) {
 					for (int y = 0; y < 8; y++) {
 						if (((x + y) % 2) != 0) {
@@ -122,13 +122,13 @@ public class Main {
 						g.fillRect(startX + y * tileSize, startY + x * tileSize, tileSize, tileSize);
 					}
 				}
-				
+
 				for (Piece piece: pieces) {
-					
+
 					int Xpiece = startX + piece.xPosition * tileSize;
-			        int Ypiece = startY + piece.yPosition * tileSize;
-					
-			        g.drawImage(assignPieces(piece), Xpiece, Ypiece, this);
+					int Ypiece = startY + piece.yPosition * tileSize;
+
+					g.drawImage(assignPieces(piece), Xpiece, Ypiece, this);
 				}
 			}
 		};
