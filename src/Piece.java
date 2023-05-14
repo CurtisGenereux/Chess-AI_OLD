@@ -1,5 +1,6 @@
 package chess;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 
 public class Piece {
@@ -21,12 +22,14 @@ public class Piece {
 	
 	public void move(int xPosition, int yPosition) {
 		
-		for (Piece piece: pieces) {
+		Iterator<Piece> pieceList = pieces.iterator();
+		Piece piece;
+		
+		while (pieceList.hasNext() == true) {
+			piece = pieceList.next();
 			if ((piece.xPosition == xPosition) && (piece.yPosition == yPosition)) {
-				piece.kill();
-				
+				pieceList.remove(); 
 			}
-			
 		}
 		
 		this.xPosition = xPosition;
