@@ -8,14 +8,14 @@ import java.io.IOException;
 
 public class ImageLoader {
 
-    private final String basePath = "C:\\Users\\curti\\javadev\\ChessAI\\src\\chess\\chess-icons\\";
+    private final String basePath = "src/chess/chess-icons/";
 
     public Image loadImage(String imageName, int tileSize) {
         BufferedImage img = null;
         try {
             img = ImageIO.read(new File(basePath + imageName + ".png"));
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("File path: '" + basePath + imageName + ".png" + "' not found.");
         }
         return img.getScaledInstance(tileSize, tileSize, BufferedImage.SCALE_SMOOTH);
     }
