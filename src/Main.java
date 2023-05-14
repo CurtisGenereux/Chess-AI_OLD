@@ -93,10 +93,10 @@ public class Main {
 		for (int i = 0; i < 8; i++) {
 			Piece whitePiece = new Piece(i, 0, "white-" + pieceNames[i], pieces);
 			Piece blackPiece = new Piece(i, 7, "black-" + pieceNames[i], pieces);
-		    pieces.add(whitePiece);
-		    pieces.add(blackPiece);
-		    board[i][7] = whitePiece;
-		    board[i][0] = blackPiece;
+			pieces.add(whitePiece);
+			pieces.add(blackPiece);
+			board[i][7] = whitePiece;
+			board[i][0] = blackPiece;
 		}
 		
 		// move test
@@ -112,18 +112,15 @@ public class Main {
 		
 		JFrame frame = new JFrame();
 		frame.setSize(tileSize*8+16, tileSize*8+38); // y axis is larger because of tab
-        frame.setLocationRelativeTo(null);
+        	frame.setLocationRelativeTo(null);
         
 		JPanel panel = new JPanel() {
-			
-			int width = 0;
-			
 			
 			public void paint(Graphics g) {
 				
 				Color backgroundColor = new Color(255, 251, 240);
-		        g.setColor(backgroundColor);
-		        g.fillRect(0, 0, width, height);
+				g.setColor(backgroundColor);
+				g.fillRect(0, 0, width, height);
 				
 				int boardSize = tileSize * 8;
 				int startX = (getWidth() - boardSize) / 2;
@@ -158,11 +155,15 @@ public class Main {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				
+				int boardSize = tileSize * 8;
+				int startX = (panel.getWidth() - boardSize) / 2;
+				int startY = (panel.getHeight() - boardSize) / 2;
+				
 				int mouseXPos = e.getX();
 				int mouseYPos = e.getY();
 				
-				int pieceXIndex = Math.round(mouseXPos/tileSize);
-				int pieceYIndex = Math.round(mouseYPos/tileSize);
+				int pieceXIndex = Math.round((mouseXPos-startX)/tileSize);
+				int pieceYIndex = Math.round((mouseYPos-startY)/tileSize);
 
 				System.out.println("picked up piece at: [" + pieceXIndex + ", " + pieceYIndex + "]");
 			}
@@ -170,38 +171,26 @@ public class Main {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				
+				int boardSize = tileSize * 8;
+				int startX = (panel.getWidth() - boardSize) / 2;
+				int startY = (panel.getHeight() - boardSize) / 2;
+				
 				int mouseXPos = e.getX();
 				int mouseYPos = e.getY();
 				
-				int pieceXIndex = Math.round(mouseXPos/tileSize);
-				int pieceYIndex = Math.round(mouseYPos/tileSize);
+				int pieceXIndex = Math.round((mouseXPos-startX)/tileSize);
+				int pieceYIndex = Math.round((mouseYPos-startY)/tileSize);
 				
-				System.out.println("dropped up piece at: [" + pieceXIndex + ", " + pieceYIndex + "]");
+				System.out.println("picked up piece at: [" + pieceXIndex + ", " + pieceYIndex + "]");
 				
 			}
-			
-			@Override
 			public void mouseClicked(MouseEvent e) { }
-			@Override
 			public void mouseEntered(MouseEvent e) { }
-			@Override
 			public void mouseExited(MouseEvent e) { }
 		});
 		panel.addMouseMotionListener(new MouseMotionListener() {
-
-			@Override
-			public void mouseDragged(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mouseMoved(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			
+			public void mouseDragged(MouseEvent e) { }
+			public void mouseMoved(MouseEvent e) { }
 		});
 	}
 }
