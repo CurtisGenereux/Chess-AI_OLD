@@ -151,6 +151,8 @@ public class Main {
 		frame.setVisible(true);
 		panel.addMouseListener(new MouseListener() {
 
+			Piece locatedPiece;
+			
 			@Override
 			public void mousePressed(MouseEvent e) {
 				
@@ -166,11 +168,8 @@ public class Main {
 
 				System.out.println("picked up piece at: [" + pieceXIndex + ", " + pieceYIndex + "]");
 				
-				Piece locatedPiece = getPeice(pieceXIndex, pieceYIndex);
-				if (locatedPiece != null) {
-					locatedPiece.move(3, 4);
-					panel.repaint();
-				}
+				locatedPiece = getPeice(pieceXIndex, pieceYIndex);
+
 			}
 
 			@Override
@@ -186,7 +185,11 @@ public class Main {
 				int pieceXIndex = Math.round((mouseXPos-startX)/tileSize);
 				int pieceYIndex = Math.round((mouseYPos-startY)/tileSize);
 				
-				System.out.println("picked up piece at: [" + pieceXIndex + ", " + pieceYIndex + "]");
+				if (locatedPiece != null) {
+					locatedPiece.move(pieceXIndex, pieceYIndex);
+					panel.repaint();
+				}
+				
 				
 			}
 			public void mouseClicked(MouseEvent e) { }
