@@ -15,6 +15,8 @@ import java.util.LinkedList;
 public class Main {
 	
     public static Image[] images;
+	public static LinkedList<Piece> pieces = new LinkedList<>();
+	public static Piece[][] board = new Piece[8][8];
     
     public static Image assignPieces(Piece piece) {
         if (piece.name.equalsIgnoreCase("white-pawn")) {
@@ -49,6 +51,14 @@ public class Main {
     		return null;
         }
     }
+    
+    public static Piece getPeice(int x, int y) {
+    	if ((x < 0 || y < 0) || (x > 7) || (y > 7)) {
+    		return null;
+    	} else {
+        	return board[x][y];
+    	}
+    }
 	
 	public static void main(String[] args) {
 		
@@ -59,10 +69,6 @@ public class Main {
 		
 		// board should be 80% of the screen
 		int tileSize = (int) Math.round(height*0.1);
-		
-		// define piece list and board;
-		LinkedList<Piece> pieces = new LinkedList<>();
-		Piece[][] board = new Piece[8][8];
 		
 		ImageLoader imageLoader = new ImageLoader();
 		images = new Image[14];
@@ -84,8 +90,8 @@ public class Main {
 		    Pawn blackPawn = new Pawn(i, 6, "black-pawn", pieces);
 		    pieces.add(whitePawn);
 		    pieces.add(blackPawn);
-		    board[i][6] = whitePawn;
-		    board[i][1] = blackPawn;
+		    board[i][1] = whitePawn;
+		    board[i][6] = blackPawn;
 		}
 
 		String[] pieceNames = {"rook", "knight-right", "bishop", "queen", "king", "bishop", "knight-left", "rook"};
@@ -95,18 +101,10 @@ public class Main {
 			Piece blackPiece = new Piece(i, 7, "black-" + pieceNames[i], pieces);
 			pieces.add(whitePiece);
 			pieces.add(blackPiece);
-			board[i][7] = whitePiece;
-			board[i][0] = blackPiece;
+			board[i][0] = whitePiece;
+			board[i][7] = blackPiece;
 		}
-		
-		// move test
-		for (Piece piece : pieces) {
-		    if (piece instanceof Pawn) {
-		        piece.move(4, 7);
-		        break;
-		    }
-		}
-		
+
 		Color baishe = new Color (241, 216, 179); //legal: -50, -0, -25; //current: -0, -125,  -75;
 		Color brown = new Color (169, 129, 97); //legal: - 50, -0, -25;
 		
@@ -148,6 +146,7 @@ public class Main {
 			}
 			
 		};
+		
 		frame.add(panel);
 		frame.setVisible(true);
 		panel.addMouseListener(new MouseListener() {
@@ -166,6 +165,12 @@ public class Main {
 				int pieceYIndex = Math.round((mouseYPos-startY)/tileSize);
 
 				System.out.println("picked up piece at: [" + pieceXIndex + ", " + pieceYIndex + "]");
+				
+				Piece locatedPiece = getPeice(pieceXIndex, pieceYIndex);
+				if (locatedPiece != null) {
+					locatedPiece.move(3, 4);
+					panel.repaint();
+				}
 			}
 
 			@Override
@@ -187,10 +192,9 @@ public class Main {
 			public void mouseClicked(MouseEvent e) { }
 			public void mouseEntered(MouseEvent e) { }
 			public void mouseExited(MouseEvent e) { }
-		});
-		panel.addMouseMotionListener(new MouseMotionListener() {
-			public void mouseDragged(MouseEvent e) { }
-			public void mouseMoved(MouseEvent e) { }
+		}); panel.addMouseMotionListener(new MouseMotionListener() {
+				public void mouseDragged(MouseEvent e) { }
+				public void mouseMoved(MouseEvent e) { }
 		});
 	}
 }
