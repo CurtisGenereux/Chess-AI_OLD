@@ -17,6 +17,7 @@ public class Main {
     public static Image[] images;
 	public static LinkedList<Piece> pieces = new LinkedList<>();
 	public static Piece[][] board = new Piece[8][8];
+	public static Piece selectedPiece = null;
     
     public static Image assignPieces(Piece piece) {
         if (piece.name.equalsIgnoreCase("white-pawn")) {
@@ -86,8 +87,8 @@ public class Main {
 	
 		// asign pieces
 		for (int i = 0; i < 8; i++) {
-		    Pawn whitePawn = new Pawn(i, 1, "white-pawn", pieces);
-		    Pawn blackPawn = new Pawn(i, 6, "black-pawn", pieces);
+		    Pawn whitePawn = new Pawn(i, 1, "white-pawn", true, pieces);
+		    Pawn blackPawn = new Pawn(i, 6, "black-pawn", false, pieces);
 		    pieces.add(whitePawn);
 		    pieces.add(blackPawn);
 		    board[i][1] = whitePawn;
@@ -97,8 +98,8 @@ public class Main {
 		String[] pieceNames = {"rook", "knight-right", "bishop", "queen", "king", "bishop", "knight-left", "rook"};
 
 		for (int i = 0; i < 8; i++) {
-			Piece whitePiece = new Piece(i, 0, "white-" + pieceNames[i], pieces);
-			Piece blackPiece = new Piece(i, 7, "black-" + pieceNames[i], pieces);
+			Piece whitePiece = new Piece(i, 0, "white-" + pieceNames[i], true, pieces);
+			Piece blackPiece = new Piece(i, 7, "black-" + pieceNames[i], false, pieces);
 			pieces.add(whitePiece);
 			pieces.add(blackPiece);
 			board[i][0] = whitePiece;
@@ -110,7 +111,7 @@ public class Main {
 		
 		JFrame frame = new JFrame();
 		frame.setSize(tileSize*8+16, tileSize*8+38); // y axis is larger because of tab
-        	frame.setLocationRelativeTo(null);
+        frame.setLocationRelativeTo(null);
         
 		JPanel panel = new JPanel() {
 			
@@ -142,9 +143,16 @@ public class Main {
 			        
 			        g.drawImage(assignPieces(piece), Xpiece, Ypiece, this);
 				}
-
-			}
 			
+				
+				if (selectedPiece != null) {
+				    int Xpiece = startX + selectedPiece.xPosition * tileSize;
+				    int Ypiece = startY + selectedPiece.yPosition * tileSize;
+				    
+				    g.drawImage(assignPieces(selectedPiece), Xpiece, Ypiece, this);
+					
+				}
+			}
 		};
 		
 		frame.add(panel);
@@ -165,13 +173,11 @@ public class Main {
 				
 				int pieceXIndex = Math.round((mouseXPos-startX)/tileSize);
 				int pieceYIndex = Math.round((mouseYPos-startY)/tileSize);
-
-				System.out.println("picked up piece at: [" + pieceXIndex + ", " + pieceYIndex + "]");
 				
 				locatedPiece = getPeice(pieceXIndex, pieceYIndex);
-
+				selectedPiece = locatedPiece;
 			}
-
+			
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				
@@ -186,18 +192,46 @@ public class Main {
 				int pieceYIndex = Math.round((mouseYPos-startY)/tileSize);
 				
 				if (locatedPiece != null) {
-					locatedPiece.move(pieceXIndex, pieceYIndex);
+					
+					int oldX = locatedPiece.xPosition;
+					int oldY = locatedPiece.yPosition;
+					
+					locatedPiece.move(pieceXIndex, pieceYIndex, locatedPiece.isLightPiece);
+					
+					board[oldX][oldY] = null;
+					board[pieceXIndex][pieceYIndex] = locatedPiece;
+					
 					panel.repaint();
 				}
 				
-				
 			}
-			public void mouseClicked(MouseEvent e) { }
-			public void mouseEntered(MouseEvent e) { }
-			public void mouseExited(MouseEvent e) { }
+			
+			public void mouseClicked(MouseEvent e) {}
+			public void mouseEntered(MouseEvent e) {}
+			public void mouseExited(MouseEvent e) {}
+			
 		}); panel.addMouseMotionListener(new MouseMotionListener() {
-				public void mouseDragged(MouseEvent e) { }
-				public void mouseMoved(MouseEvent e) { }
+			
+				public void mouseDragged(MouseEvent e) {
+					
+					int boardSize = tileSize * 8;
+					int startX = (panel.getWidth() - boardSize) / 2;
+					int startY = (panel.getHeight() - boardSize) / 2;
+					
+					int mouseXPos = e.getX();
+					int mouseYPos = e.getY();
+					
+					int pieceXIndex = (mouseXPos-startX)/tileSize;
+					int pieceYIndex = (mouseYPos-startY)/tileSize;
+	
+					if (selectedPiece != null) {
+						selectedPiece.xPosition = pieceXIndex;
+						selectedPiece.yPosition = pieceYIndex;
+						panel.repaint();
+					}
+					
+				}
+				public void mouseMoved(MouseEvent e) {}
 		});
 	}
 }
