@@ -20,37 +20,37 @@ public class Main {
 	public static Piece selectedPiece = null;
     
     public static Image assignImages(Piece piece) {
-    		
+		
 	switch (piece.name.toLowerCase()) {
-    	case "white-pawn":
-    		return images[0];
-    	case "white-knight-left":
-    		return images[1];
-    	case "white-knight-right":
-    		return images[2];
-    	case "white-rook":
-    		return images[3];
-    	case "white-bishop":
-    		return images[4];
-    	case "white-queen":
-    		return images[5];
-    	case "white-king":
-    		return images[6];
-    	case "black-pawn":
-    		return images[7];
-    	case "black-knight-left":
-    		return images[8];
-    	case "black-knight-right":
-    		return images[9];
-    	case "black-rook":
-    		return images[10];
-    	case "black-bishop":
-    		return images[11];
-    	case "black-queen":
-    		return images[12];
-    	case "black-king":
-    		return images[13];
-    		
+		case "white-pawn":
+			return images[0];
+		case "white-knight-left":
+			return images[1];
+		case "white-knight-right":
+			return images[2];
+		case "white-rook":
+			return images[3];
+		case "white-bishop":
+			return images[4];
+		case "white-queen":
+			return images[5];
+		case "white-king":
+			return images[6];
+		case "black-pawn":
+			return images[7];
+		case "black-knight-left":
+			return images[8];
+		case "black-knight-right":
+			return images[9];
+		case "black-rook":
+			return images[10];
+		case "black-bishop":
+			return images[11];
+		case "black-queen":
+			return images[12];
+		case "black-king":
+			return images[13];
+
     	} return null;
     }
     
@@ -112,7 +112,7 @@ public class Main {
 		
 		JFrame frame = new JFrame();
 		frame.setSize(tileSize*8+16, tileSize*8+38); // y axis is larger because of tab
-        frame.setLocationRelativeTo(null);
+        	frame.setLocationRelativeTo(null);
         
 		JPanel panel = new JPanel() {
 			
@@ -142,7 +142,7 @@ public class Main {
 					int Xpiece = startX + piece.xPosition * tileSize;
 			        int Ypiece = startY + piece.yPosition * tileSize;
 			        
-			        g.drawImage(assignPieces(piece), Xpiece, Ypiece, this);
+			        g.drawImage(assignImages(piece), Xpiece, Ypiece, this);
 				}
 			
 				
@@ -150,7 +150,7 @@ public class Main {
 				    int Xpiece = startX + selectedPiece.xPosition * tileSize;
 				    int Ypiece = startY + selectedPiece.yPosition * tileSize;
 				    
-				    g.drawImage(assignPieces(selectedPiece), Xpiece, Ypiece, this);
+				    g.drawImage(assignImages(selectedPiece), Xpiece, Ypiece, this);
 					
 				}
 			}
@@ -177,6 +177,7 @@ public class Main {
 				
 				locatedPiece = getPeice(pieceXIndex, pieceYIndex);
 				selectedPiece = locatedPiece;
+
 			}
 			
 			@Override
@@ -204,6 +205,8 @@ public class Main {
 					
 					panel.repaint();
 				}
+				
+				panel.repaint();
 				
 			}
 			
