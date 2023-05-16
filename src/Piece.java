@@ -7,6 +7,8 @@ public class Piece {
 	
 	int xPosition;
 	int yPosition;
+   	int originalX;
+    	int originalY;
 	LinkedList<Piece> pieces;
 	String name;
 	boolean isLightPiece;
@@ -15,6 +17,8 @@ public class Piece {
 		
 		this.xPosition = xPosition;
 		this.yPosition = yPosition;
+	    	this.originalX = xPosition;
+	    	this.originalY = xPosition;
 		this.pieces = pieces;
 		this.isLightPiece = isLightPiece;
 		this.name = name;
@@ -22,10 +26,12 @@ public class Piece {
 		
 	}
 	
+	public void pickUp() {
+		this.originalX = this.xPosition;
+		this.originalY = this.yPosition;
+	}
+	
 	public void move(int xPosition, int yPosition, boolean isLightPiece) {
-		
-		int oldX = xPosition;
-		int oldY = yPosition;
 		
 		this.isLightPiece = isLightPiece;
 		
@@ -34,20 +40,22 @@ public class Piece {
 		
 		while (pieceList.hasNext() == true) {
 			piece = pieceList.next();
-			if (piece != null) {
-				this.xPosition = xPosition;
-				this.yPosition = yPosition;
+			if (piece != null && piece != this) {
+				if ((piece.xPosition == xPosition) && (piece.yPosition == yPosition)) {
+					if ((piece.isLightPiece != isLightPiece)) {
+						pieceList.remove(); 
+						this.xPosition = xPosition;
+						this.yPosition = yPosition;
+					} else {
+						System.out.println("friendly fire return to [" + originalX + "," + originalY + "]");
+						this.xPosition = originalX;
+						this.yPosition = originalY;
+					}
+				} else {
+					this.xPosition = xPosition;
+					this.yPosition = yPosition;
+				}
 			}
-			if ((piece.xPosition == xPosition) && (piece.yPosition == yPosition) && (piece != null) && (piece.isLightPiece != isLightPiece)) {
-				pieceList.remove(); 
-				this.xPosition = xPosition;
-				this.yPosition = yPosition;
-			} else {
-				// snap piece back to start tile
-			}
-			
-		}
-		
+		}	
 	}
-	
 }
