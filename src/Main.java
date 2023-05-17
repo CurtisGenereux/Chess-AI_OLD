@@ -5,6 +5,9 @@ import java.awt.Graphics;
 import java.awt.Image;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import pieces.Pawn;
+
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
@@ -18,39 +21,42 @@ public class Main {
 	public static LinkedList<Piece> pieces = new LinkedList<>();
 	public static Piece[][] board = new Piece[8][8];
 	public static Piece selectedPiece = null;
+	
+	public static int mouseX = 0;
+	public static int mouseY = 0;
     
     public static Image assignImages(Piece piece) {
 		
 	switch (piece.name.toLowerCase()) {
-		case "white-pawn":
-			return images[0];
-		case "white-knight-left":
-			return images[1];
-		case "white-knight-right":
-			return images[2];
-		case "white-rook":
-			return images[3];
-		case "white-bishop":
-			return images[4];
-		case "white-queen":
-			return images[5];
-		case "white-king":
-			return images[6];
-		case "black-pawn":
-			return images[7];
-		case "black-knight-left":
-			return images[8];
-		case "black-knight-right":
-			return images[9];
-		case "black-rook":
-			return images[10];
-		case "black-bishop":
-			return images[11];
-		case "black-queen":
-			return images[12];
-		case "black-king":
-			return images[13];
-
+    	case "white-pawn":
+    		return images[0];
+    	case "white-knight-left":
+    		return images[1];
+    	case "white-knight-right":
+    		return images[2];
+    	case "white-rook":
+    		return images[3];
+    	case "white-bishop":
+    		return images[4];
+    	case "white-queen":
+    		return images[5];
+    	case "white-king":
+    		return images[6];
+    	case "black-pawn":
+    		return images[7];
+    	case "black-knight-left":
+    		return images[8];
+    	case "black-knight-right":
+    		return images[9];
+    	case "black-rook":
+    		return images[10];
+    	case "black-bishop":
+    		return images[11];
+    	case "black-queen":
+    		return images[12];
+    	case "black-king":
+    		return images[13];
+    		
     	} return null;
     }
     
@@ -112,7 +118,7 @@ public class Main {
 		
 		JFrame frame = new JFrame();
 		frame.setSize(tileSize*8+16, tileSize*8+38); // y axis is larger because of tab
-        	frame.setLocationRelativeTo(null);
+        frame.setLocationRelativeTo(null);
         
 		JPanel panel = new JPanel() {
 			
@@ -137,22 +143,22 @@ public class Main {
 					}
 				}
 				
-				for (Piece piece: pieces) {
-					
-					int Xpiece = startX + piece.xPosition * tileSize;
-			        int Ypiece = startY + piece.yPosition * tileSize;
-			        
-			        g.drawImage(assignImages(piece), Xpiece, Ypiece, this);
-				}
-			
+					for (Piece piece: pieces) {
+						
+						if (piece != selectedPiece) {
+							int Xpiece = startX + piece.xPosition * tileSize;
+					        int Ypiece = startY + piece.yPosition * tileSize;
+					        
+					        g.drawImage(assignImages(piece), Xpiece, Ypiece, this);
+						}
+					}
 				
 				if (selectedPiece != null) {
-				    int Xpiece = startX + selectedPiece.xPosition * tileSize;
-				    int Ypiece = startY + selectedPiece.yPosition * tileSize;
-				    
-				    g.drawImage(assignImages(selectedPiece), Xpiece, Ypiece, this);
-					
+					g.drawImage(assignImages(selectedPiece),
+								mouseX-(tileSize/2),
+								mouseY-(tileSize/2), this);
 				}
+
 			}
 		};
 		
@@ -169,11 +175,11 @@ public class Main {
 				int startX = (panel.getWidth() - boardSize) / 2;
 				int startY = (panel.getHeight() - boardSize) / 2;
 				
-				int mouseXPos = e.getX();
-				int mouseYPos = e.getY();
+				mouseX = e.getX();
+				mouseY = e.getY();
 				
-				int pieceXIndex = Math.round((mouseXPos-startX)/tileSize);
-				int pieceYIndex = Math.round((mouseYPos-startY)/tileSize);
+				int pieceXIndex = Math.round((mouseX-startX)/tileSize);
+				int pieceYIndex = Math.round((mouseY-startY)/tileSize);
 				
 				locatedPiece = getPeice(pieceXIndex, pieceYIndex);
 				selectedPiece = locatedPiece;
@@ -187,11 +193,11 @@ public class Main {
 				int startX = (panel.getWidth() - boardSize) / 2;
 				int startY = (panel.getHeight() - boardSize) / 2;
 				
-				int mouseXPos = e.getX();
-				int mouseYPos = e.getY();
+				mouseX = e.getX();
+				mouseY = e.getY();
 				
-				int pieceXIndex = Math.round((mouseXPos-startX)/tileSize);
-				int pieceYIndex = Math.round((mouseYPos-startY)/tileSize);
+				int pieceXIndex = Math.round((mouseX-startX)/tileSize);
+				int pieceYIndex = Math.round((mouseY-startY)/tileSize);
 				
 				if (locatedPiece != null) {
 					
@@ -206,6 +212,7 @@ public class Main {
 					panel.repaint();
 				}
 				
+				selectedPiece = null;
 				panel.repaint();
 				
 			}
@@ -222,11 +229,11 @@ public class Main {
 					int startX = (panel.getWidth() - boardSize) / 2;
 					int startY = (panel.getHeight() - boardSize) / 2;
 					
-					int mouseXPos = e.getX();
-					int mouseYPos = e.getY();
+					mouseX = e.getX();
+					mouseY = e.getY();
 					
-					int pieceXIndex = (mouseXPos-startX)/tileSize;
-					int pieceYIndex = (mouseYPos-startY)/tileSize;
+					int pieceXIndex = (mouseX-startX)/tileSize;
+					int pieceYIndex = (mouseY-startY)/tileSize;
 	
 					if (selectedPiece != null) {
 						selectedPiece.xPosition = pieceXIndex;
