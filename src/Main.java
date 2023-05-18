@@ -5,9 +5,6 @@ import java.awt.Graphics;
 import java.awt.Image;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
-import pieces.Pawn;
-
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
@@ -15,12 +12,15 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.LinkedList;
 
+import pieces.Pawn;
+
 public class Main {
 	
     public static Image[] images;
 	public static LinkedList<Piece> pieces = new LinkedList<>();
 	public static Piece[][] board = new Piece[8][8];
 	public static Piece selectedPiece = null;
+	public static Piece targetPiece = null;
 	
 	public static int mouseX = 0;
 	public static int mouseY = 0;
@@ -60,14 +60,14 @@ public class Main {
     	} return null;
     }
     
-    public static Piece getPeice(int x, int y) {
+    public static Piece getPiece(int x, int y) {
     	if ((x < 0 || y < 0) || (x > 7) || (y > 7)) {
     		return null;
     	} else {
         	return board[x][y];
     	}
     }
-	
+    
 	public static void main(String[] args) {
 		
 		// grab user resolution
@@ -118,7 +118,7 @@ public class Main {
 		
 		JFrame frame = new JFrame();
 		frame.setSize(tileSize*8+16, tileSize*8+38); // y axis is larger because of tab
-        frame.setLocationRelativeTo(null);
+        	frame.setLocationRelativeTo(null);
         
 		JPanel panel = new JPanel() {
 			
@@ -146,17 +146,17 @@ public class Main {
 					for (Piece piece: pieces) {
 						
 						if (piece != selectedPiece) {
-							int Xpiece = startX + piece.xPosition * tileSize;
-					        int Ypiece = startY + piece.yPosition * tileSize;
-					        
-					        g.drawImage(assignImages(piece), Xpiece, Ypiece, this);
+								
+								int Xpiece = startX + piece.xPosition * tileSize;
+						        int Ypiece = startY + piece.yPosition * tileSize;
+						        
+						        g.drawImage(assignImages(piece), Xpiece, Ypiece, this);
+
 						}
 					}
 				
 				if (selectedPiece != null) {
-					g.drawImage(assignImages(selectedPiece),
-								mouseX-(tileSize/2),
-								mouseY-(tileSize/2), this);
+					g.drawImage(assignImages(selectedPiece), mouseX-(tileSize/2), mouseY-(tileSize/2), null);
 				}
 
 			}
@@ -167,6 +167,9 @@ public class Main {
 		panel.addMouseListener(new MouseListener() {
 
 			Piece locatedPiece;
+			
+			int oldX = 0;
+			int oldY = 0;
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -181,7 +184,10 @@ public class Main {
 				int pieceXIndex = Math.round((mouseX-startX)/tileSize);
 				int pieceYIndex = Math.round((mouseY-startY)/tileSize);
 				
-				locatedPiece = getPeice(pieceXIndex, pieceYIndex);
+				oldX = pieceXIndex;
+				oldY = pieceYIndex;
+				
+				locatedPiece = getPiece(pieceXIndex, pieceYIndex);
 				selectedPiece = locatedPiece;
 
 			}
@@ -199,15 +205,19 @@ public class Main {
 				int pieceXIndex = Math.round((mouseX-startX)/tileSize);
 				int pieceYIndex = Math.round((mouseY-startY)/tileSize);
 				
+				targetPiece = getPiece(pieceXIndex, pieceYIndex);
+				System.out.println(targetPiece);
+				
 				if (locatedPiece != null) {
-					
-					int oldX = locatedPiece.xPosition;
-					int oldY = locatedPiece.yPosition;
 					
 					locatedPiece.move(pieceXIndex, pieceYIndex, locatedPiece.isLightPiece);
 					
-					board[oldX][oldY] = null;
-					board[pieceXIndex][pieceYIndex] = locatedPiece;
+					if (pieceXIndex >=0 && pieceXIndex <= 7 && pieceYIndex >= 0 && pieceYIndex <= 7) {
+						board[pieceXIndex][pieceYIndex] = locatedPiece;
+						System.out.println("[" + oldX + "," + oldY + "]");
+					} else {
+						selectedPiece.move(oldX, oldY, selectedPiece.isLightPiece);
+					}
 					
 					panel.repaint();
 				}
@@ -234,7 +244,7 @@ public class Main {
 					
 					int pieceXIndex = (mouseX-startX)/tileSize;
 					int pieceYIndex = (mouseY-startY)/tileSize;
-	
+					
 					if (selectedPiece != null) {
 						selectedPiece.xPosition = pieceXIndex;
 						selectedPiece.yPosition = pieceYIndex;
