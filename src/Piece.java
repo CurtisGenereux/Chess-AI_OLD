@@ -7,18 +7,23 @@ public class Piece {
 	
 	int xPosition;
 	int yPosition;
-    int originalX;
-    int originalY;
+    	int originalX;
+    	int originalY;
 	LinkedList<Piece> pieces;
 	String name;
 	boolean isLightPiece;
+	public boolean isMoveLegal = true;
+	
+	public boolean isMoveLegal() {
+		return isMoveLegal;
+	}
 	
 	public Piece(int xPosition, int yPosition, String name, boolean isLightPiece, LinkedList<Piece> pieces) {
 		
 		this.xPosition = xPosition;
 		this.yPosition = yPosition;
-	    this.originalX = xPosition;
-	    this.originalY = yPosition;
+	    	this.originalX = xPosition;
+	    	this.originalY = yPosition;
 		this.pieces = pieces;
 		this.isLightPiece = isLightPiece;
 		this.name = name;
@@ -26,10 +31,10 @@ public class Piece {
 		
 	}
 	
-    public void pickUp() {
-        this.originalX = this.xPosition;
-        this.originalY = this.yPosition;
-    }
+	public void pickUp() {
+		this.originalX = this.xPosition;
+		this.originalY = this.yPosition;
+	}
 	
 	public void move(int xPosition, int yPosition, boolean isLightPiece) {
 		
@@ -46,10 +51,11 @@ public class Piece {
 						pieceList.remove(); 
 						this.xPosition = xPosition;
 						this.yPosition = yPosition;
+						isMoveLegal = true;
 					} else {
-						System.out.println("return piece to " + "[" + originalX + "," + originalY + "]");
 						this.xPosition = originalX;
 						this.yPosition = originalY;
+						isMoveLegal = false;
 						return;
 					}
 				} else {
@@ -59,9 +65,12 @@ public class Piece {
 			}
 		}	
 		
-		if (xPosition >=0 && xPosition <= 7 && yPosition >= 0 && yPosition <= 7) {
+		if ((xPosition >= 0 && yPosition >= 0) && (xPosition <= 7 && yPosition <= 7)) {
 			this.originalX = this.xPosition;
 			this.originalY = this.yPosition;
 		}
+		
+		isMoveLegal = true;
 	}	
+	
 }
