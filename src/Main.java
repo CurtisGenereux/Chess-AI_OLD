@@ -16,57 +16,58 @@ import pieces.Pawn;
 
 public class Main {
 	
-    public static Image[] images;
+    	public static Image[] images;
 	public static LinkedList<Piece> pieces = new LinkedList<>();
 	public static Piece[][] board = new Piece[8][8];
 	public static Piece selectedPiece = null;
 	public static Piece targetPiece = null;
+	public boolean isMoveLegal;
 	
 	public static int mouseX = 0;
 	public static int mouseY = 0;
     
-    public static Image assignImages(Piece piece) {
-		
-	switch (piece.name.toLowerCase()) {
-    	case "white-pawn":
-    		return images[0];
-    	case "white-knight-left":
-    		return images[1];
-    	case "white-knight-right":
-    		return images[2];
-    	case "white-rook":
-    		return images[3];
-    	case "white-bishop":
-    		return images[4];
-    	case "white-queen":
-    		return images[5];
-    	case "white-king":
-    		return images[6];
-    	case "black-pawn":
-    		return images[7];
-    	case "black-knight-left":
-    		return images[8];
-    	case "black-knight-right":
-    		return images[9];
-    	case "black-rook":
-    		return images[10];
-    	case "black-bishop":
-    		return images[11];
-    	case "black-queen":
-    		return images[12];
-    	case "black-king":
-    		return images[13];
-    		
-    	} return null;
-    }
+	public static Image assignImages(Piece piece) {
+
+		switch (piece.name.toLowerCase()) {
+			case "white-pawn":
+				return images[0];
+			case "white-knight-left":
+				return images[1];
+			case "white-knight-right":
+				return images[2];
+			case "white-rook":
+				return images[3];
+			case "white-bishop":
+				return images[4];
+			case "white-queen":
+				return images[5];
+			case "white-king":
+				return images[6];
+			case "black-pawn":
+				return images[7];
+			case "black-knight-left":
+				return images[8];
+			case "black-knight-right":
+				return images[9];
+			case "black-rook":
+				return images[10];
+			case "black-bishop":
+				return images[11];
+			case "black-queen":
+				return images[12];
+			case "black-king":
+				return images[13];
+
+		} return null;
+	}
     
-    public static Piece getPiece(int x, int y) {
-    	if ((x < 0 || y < 0) || (x > 7) || (y > 7)) {
-    		return null;
-    	} else {
-        	return board[x][y];
-    	}
-    }
+	public static Piece getPiece(int x, int y) {
+	if ((x < 0 || y < 0) || (x > 7) || (y > 7)) {
+		return null;
+	} else {
+		return board[x][y];
+	}
+	}
     
 	public static void main(String[] args) {
 		
@@ -206,21 +207,19 @@ public class Main {
 				int pieceYIndex = Math.round((mouseY-startY)/tileSize);
 				
 				targetPiece = getPiece(pieceXIndex, pieceYIndex);
-				System.out.println(targetPiece);
 				
 				if (locatedPiece != null) {
 					
 					locatedPiece.move(pieceXIndex, pieceYIndex, locatedPiece.isLightPiece);
 					
 					if (pieceXIndex >=0 && pieceXIndex <= 7 && pieceYIndex >= 0 && pieceYIndex <= 7) {
-						locatedPiece.move(pieceXIndex, pieceYIndex, false);
-						
-						board[pieceXIndex][pieceYIndex] = locatedPiece; // <---- fix bruh
-						
-						System.out.println("[" + oldX + "," + oldY + "]");
+						locatedPiece.move(pieceXIndex, pieceYIndex, locatedPiece.isLightPiece);
+						if (locatedPiece.isMoveLegal) {
+							board[pieceXIndex][pieceYIndex] = locatedPiece;
+						}
+
 					} else {
 						selectedPiece.move(oldX, oldY, selectedPiece.isLightPiece);
-						board[pieceXIndex][pieceYIndex] = selectedPiece;
 					}
 					
 					panel.repaint();
