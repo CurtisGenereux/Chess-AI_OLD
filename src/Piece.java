@@ -18,7 +18,7 @@ public class Piece {
 		this.xPosition = xPosition;
 		this.yPosition = yPosition;
 	    	this.originalX = xPosition;
-	    	this.originalY = xPosition;
+	    	this.originalY = yPosition;
 		this.pieces = pieces;
 		this.isLightPiece = isLightPiece;
 		this.name = name;
