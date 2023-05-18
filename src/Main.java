@@ -213,10 +213,14 @@ public class Main {
 					locatedPiece.move(pieceXIndex, pieceYIndex, locatedPiece.isLightPiece);
 					
 					if (pieceXIndex >=0 && pieceXIndex <= 7 && pieceYIndex >= 0 && pieceYIndex <= 7) {
-						board[pieceXIndex][pieceYIndex] = locatedPiece;
+						locatedPiece.move(pieceXIndex, pieceYIndex, false);
+						
+						board[pieceXIndex][pieceYIndex] = locatedPiece; // <---- fix bruh
+						
 						System.out.println("[" + oldX + "," + oldY + "]");
 					} else {
 						selectedPiece.move(oldX, oldY, selectedPiece.isLightPiece);
+						board[pieceXIndex][pieceYIndex] = selectedPiece;
 					}
 					
 					panel.repaint();
