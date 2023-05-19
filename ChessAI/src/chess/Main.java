@@ -16,58 +16,57 @@ import pieces.Pawn;
 
 public class Main {
 	
-    public static Image[] images;
-	public static LinkedList<Piece> pieces = new LinkedList<>();
-	public static Piece[][] board = new Piece[8][8];
-	public static Piece selectedPiece = null;
-	public static Piece targetPiece = null;
-	public boolean isMoveLegal;
-	
-	public static int mouseX = 0;
-	public static int mouseY = 0;
+	public static Image[] images;
+		public static LinkedList<Piece> pieces = new LinkedList<>();
+		public static Piece[][] board = new Piece[8][8];
+		public static Piece selectedPiece = null;
+		public static Piece targetPiece = null;
+		public boolean isMoveLegal;
+
+		public static int mouseXPixelPosition = 0;
+		public static int mouseYPixelPosition = 0;
     
-    public static Image assignImages(Piece piece) {
-		
+	public static Image assignImages(Piece piece) {
+
 	switch (piece.name.toLowerCase()) {
-    	case "white-pawn":
-    		return images[0];
-    	case "white-knight-left":
-    		return images[1];
-    	case "white-knight-right":
-    		return images[2];
-    	case "white-rook":
-    		return images[3];
-    	case "white-bishop":
-    		return images[4];
-    	case "white-queen":
-    		return images[5];
-    	case "white-king":
-    		return images[6];
-    	case "black-pawn":
-    		return images[7];
-    	case "black-knight-left":
-    		return images[8];
-    	case "black-knight-right":
-    		return images[9];
-    	case "black-rook":
-    		return images[10];
-    	case "black-bishop":
-    		return images[11];
-    	case "black-queen":
-    		return images[12];
-    	case "black-king":
-    		return images[13];
-    		
-    	} return null;
-    }
+		case "white-pawn":
+			return images[0];
+		case "white-knight-left":
+			return images[1];
+		case "white-knight-right":
+			return images[2];
+		case "white-rook":
+			return images[3];
+		case "white-bishop":
+			return images[4];
+		case "white-queen":
+			return images[5];
+		case "white-king":
+			return images[6];
+		case "black-pawn":
+			return images[7];
+		case "black-knight-left":
+			return images[8];
+		case "black-knight-right":
+			return images[9];
+		case "black-rook":
+			return images[10];
+		case "black-bishop":
+			return images[11];
+		case "black-queen":
+			return images[12];
+		case "black-king":
+			return images[13];
+		} return null;
+	}
     
-    public static Piece getPiece(int xPosition, int yPosition) {
-    	if ((xPosition < 0) || (yPosition < 0) || (xPosition > 7) || (yPosition > 7)) {
-    		return null;
-    	} else {
-    		return board[xPosition][yPosition];
-    	}
-    }
+	public static Piece getPiece(int xPosition, int yPosition) {
+		if ((xPosition < 0) || (yPosition < 0) || (xPosition > 7) || (yPosition > 7)) {
+			return null;
+		} else {
+			return board[xPosition][yPosition];
+		}
+	}
     
 	public static void main(String[] args) {
 		
@@ -130,8 +129,8 @@ public class Main {
 				g.fillRect(0, 0, width, height);
 				
 				int boardSize = tileSize * 8;
-				int startX = (getWidth() - boardSize) / 2;
-				int startY = (getHeight() - boardSize) / 2;
+				int xBorderWidth = (getWidth() - boardSize) / 2;
+				int yBorderHeight = (getHeight() - boardSize) / 2;
 				
 				for (int x = 0; x < 8; x++) {
 					for (int y = 0; y < 8; y++) {
@@ -140,38 +139,36 @@ public class Main {
 						} else {
 							g.setColor(baishe);
 						}		
-						g.fillRect(startX + y * tileSize, startY + x * tileSize, tileSize, tileSize);
+						g.fillRect(xBorderWidth + y * tileSize, yBorderHeight + x * tileSize, tileSize, tileSize);
 					}
 				}
 				
-					for (Piece piece: pieces) {
-						
-						if (piece != selectedPiece) {
-							// draw selectedPiece last so it can be on the top layer
-								
-								int Xpiece = startX + piece.xPosition * tileSize;
-						        int Ypiece = startY + piece.yPosition * tileSize;
-						        
-						        g.drawImage(assignImages(piece), Xpiece, Ypiece, this);
-
-						}
+				for (Piece piece: pieces) {
+					
+					if (piece != selectedPiece) {
+						// draw selectedPiece last so it can be on the top layer
+							
+						int xPixelPosition = (piece.xPosition * tileSize) + xBorderWidth;
+						int yPixelPosition = (piece.yPosition * tileSize) + yBorderHeight;
+						// find tile position then add the size of the background to center pieces
+				        
+				        	g.drawImage(assignImages(piece), xPixelPosition, yPixelPosition, this);
 					}
+				}
 				
 				if (selectedPiece != null) {
-					g.drawImage(assignImages(selectedPiece), mouseX-(tileSize/2), mouseY-(tileSize/2), null);
+					g.drawImage(assignImages(selectedPiece), mouseXPixelPosition-(tileSize/2), mouseYPixelPosition-(tileSize/2), null);
 				}
-
 			}
 		};
 		
 		frame.add(panel);
 		frame.setVisible(true);
+		
 		panel.addMouseListener(new MouseListener() {
-
-			Piece locatedPiece;
 			
-			int oldX = 0;
-			int oldY = 0;
+			int oldXTile = 0;
+			int oldYTile = 0;
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -180,17 +177,16 @@ public class Main {
 				int startX = (panel.getWidth() - boardSize) / 2;
 				int startY = (panel.getHeight() - boardSize) / 2;
 				
-				mouseX = e.getX();
-				mouseY = e.getY();
+				mouseXPixelPosition = e.getX();
+				mouseYPixelPosition = e.getY();
 				
-				int pieceXIndex = Math.round((mouseX-startX)/tileSize);
-				int pieceYIndex = Math.round((mouseY-startY)/tileSize);
+				int mouseXTile = Math.round((mouseXPixelPosition-startX)/tileSize);
+				int mouseYTile = Math.round((mouseYPixelPosition-startY)/tileSize);
 				
-				oldX = pieceXIndex;
-				oldY = pieceYIndex;
+				oldXTile = mouseXTile;
+				oldYTile = mouseYTile;
 				
-				locatedPiece = getPiece(pieceXIndex, pieceYIndex);
-				selectedPiece = locatedPiece;
+				selectedPiece = getPiece(mouseXTile, mouseYTile);
 
 			}
 			
@@ -201,35 +197,33 @@ public class Main {
 				int startX = (panel.getWidth() - boardSize) / 2;
 				int startY = (panel.getHeight() - boardSize) / 2;
 				
-				mouseX = e.getX();
-				mouseY = e.getY();
+				mouseXPixelPosition = e.getX();
+				mouseYPixelPosition = e.getY();
 				
-				int pieceXIndex = Math.round((mouseX-startX)/tileSize);
-				int pieceYIndex = Math.round((mouseY-startY)/tileSize);
+				int mouseXTile = Math.round((mouseXPixelPosition-startX)/tileSize);
+				int mouseYTile = Math.round((mouseYPixelPosition-startY)/tileSize);
 				
-				targetPiece = getPiece(pieceXIndex, pieceYIndex);
+				targetPiece = getPiece(mouseXTile, mouseYTile);
 				
 				if (selectedPiece == null) {
 					return;
 				}
 				
-				selectedPiece.move(pieceXIndex, pieceYIndex, selectedPiece.isLightPiece);
-				
-				if (pieceXIndex < 0 || pieceYIndex < 0 || pieceXIndex > 7 || pieceXIndex > 7) {
-					return;
-				}
+				selectedPiece.move(mouseXTile, mouseYTile, selectedPiece.isLightPiece);
 
-				if (selectedPiece.isMoveLegal) {
-					selectedPiece.move(pieceXIndex, pieceYIndex, selectedPiece.isLightPiece);
+				if (mouseXTile >= 0 && mouseYTile >= 0 && mouseXTile <= 7 && mouseYTile <= 7 && selectedPiece.isMoveLegal) {
 					if (selectedPiece.isMoveLegal) {
-						board[pieceXIndex][pieceYIndex] = selectedPiece;
-						if (pieceXIndex != oldX || pieceYIndex != oldY) {
-							board[oldX][oldY] = null;
+						selectedPiece.move(mouseXTile, mouseYTile, selectedPiece.isLightPiece);
+						if (selectedPiece.isMoveLegal) {
+							board[mouseXTile][mouseYTile] = selectedPiece;
+							if (mouseXTile != oldXTile || mouseYTile != oldYTile) {
+								board[oldXTile][oldYTile] = null;
+							}
 						}
 					}
 
 				} else {
-					selectedPiece.move(oldX, oldY, selectedPiece.isLightPiece);
+					selectedPiece.move(oldXTile, oldYTile, selectedPiece.isLightPiece);
 				}
 				
 				selectedPiece = null;
@@ -239,7 +233,7 @@ public class Main {
 			
 			public void mouseClicked(MouseEvent e) {}
 			public void mouseEntered(MouseEvent e) {}
-			public void mouseExited(MouseEvent e) {}
+			public void mouseExited(MouseEvent e)  {}
 			
 		}); panel.addMouseMotionListener(new MouseMotionListener() {
 			
@@ -249,20 +243,24 @@ public class Main {
 					int startX = (panel.getWidth() - boardSize) / 2;
 					int startY = (panel.getHeight() - boardSize) / 2;
 					
-					mouseX = e.getX();
-					mouseY = e.getY();
+					mouseXPixelPosition = e.getX();
+					mouseYPixelPosition = e.getY();
 					
-					int pieceXIndex = (mouseX-startX)/tileSize;
-					int pieceYIndex = (mouseY-startY)/tileSize;
+					int mouseXTile = Math.round((mouseXPixelPosition-startX)/tileSize);
+					int mouseYTile = Math.round((mouseYPixelPosition-startY)/tileSize);
 					
 					if (selectedPiece != null) {
-						selectedPiece.xPosition = pieceXIndex;
-						selectedPiece.yPosition = pieceYIndex;
+						selectedPiece.xPosition = mouseXTile;
+						selectedPiece.yPosition = mouseYTile;
 						panel.repaint();
 					}
 					
 				}
+				
 				public void mouseMoved(MouseEvent e) {}
 		});
 	}
 }
+
+
+
