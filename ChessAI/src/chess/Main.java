@@ -209,24 +209,27 @@ public class Main {
 				
 				targetPiece = getPiece(pieceXIndex, pieceYIndex);
 				
-				if (locatedPiece != null) {
-					
-					locatedPiece.move(pieceXIndex, pieceYIndex, locatedPiece.isLightPiece);
-					
-					if (pieceXIndex >=0 && pieceXIndex <= 7 && pieceYIndex >= 0 && pieceYIndex <= 7 && locatedPiece.isMoveLegal) {
-						locatedPiece.move(pieceXIndex, pieceYIndex, locatedPiece.isLightPiece);
-						if (locatedPiece.isMoveLegal) {
-							board[pieceXIndex][pieceYIndex] = locatedPiece;
-							if (pieceXIndex != oldX || pieceYIndex != oldY) {
-								board[oldX][oldY] = null;
-							}
-						}
+				if (selectedPiece == null) {
+					return;
+				}
+				
+				selectedPiece.move(pieceXIndex, pieceYIndex, selectedPiece.isLightPiece);
+				
+				if (pieceXIndex < 0 || pieceYIndex < 0 || pieceXIndex > 7 || pieceXIndex > 7) {
+					return;
+				}
 
-					} else {
-						selectedPiece.move(oldX, oldY, selectedPiece.isLightPiece);
+				if (selectedPiece.isMoveLegal) {
+					selectedPiece.move(pieceXIndex, pieceYIndex, selectedPiece.isLightPiece);
+					if (selectedPiece.isMoveLegal) {
+						board[pieceXIndex][pieceYIndex] = selectedPiece;
+						if (pieceXIndex != oldX || pieceYIndex != oldY) {
+							board[oldX][oldY] = null;
+						}
 					}
-					
-					panel.repaint();
+
+				} else {
+					selectedPiece.move(oldX, oldY, selectedPiece.isLightPiece);
 				}
 				
 				selectedPiece = null;
