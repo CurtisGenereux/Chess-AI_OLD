@@ -11,54 +11,51 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.LinkedList;
-
 import pieces.Pawn;
 
 public class Main {
 	
 	public static Image[] images;
-		public static LinkedList<Piece> pieces = new LinkedList<>();
-		public static Piece[][] board = new Piece[8][8];
-		public static Piece selectedPiece = null;
-		public static Piece targetPiece = null;
-		public boolean isMoveLegal;
-
-		public static int mouseXPixelPosition = 0;
-		public static int mouseYPixelPosition = 0;
+	public static LinkedList<Piece> pieces = new LinkedList<>();
+	public static Piece[][] board = new Piece[8][8];
+	public static Piece selectedPiece = null;
+	public static Piece targetPiece = null;
+	public boolean isMoveLegal;
+	public static int mouseXPixelPosition = 0;
+	public static int mouseYPixelPosition = 0;
     
 	public static Image assignImages(Piece piece) {
-
-	switch (piece.name.toLowerCase()) {
-		case "white-pawn":
-			return images[0];
-		case "white-knight-left":
-			return images[1];
-		case "white-knight-right":
-			return images[2];
-		case "white-rook":
-			return images[3];
-		case "white-bishop":
-			return images[4];
-		case "white-queen":
-			return images[5];
-		case "white-king":
-			return images[6];
-		case "black-pawn":
-			return images[7];
-		case "black-knight-left":
-			return images[8];
-		case "black-knight-right":
-			return images[9];
-		case "black-rook":
-			return images[10];
-		case "black-bishop":
-			return images[11];
-		case "black-queen":
-			return images[12];
-		case "black-king":
-			return images[13];
-		} return null;
-	}
+		switch (piece.name.toLowerCase()) {
+			case "white-pawn":
+				return images[0];
+			case "white-knight-left":
+				return images[1];
+			case "white-knight-right":
+				return images[2];
+			case "white-rook":
+				return images[3];
+			case "white-bishop":
+				return images[4];
+			case "white-queen":
+				return images[5];
+			case "white-king":
+				return images[6];
+			case "black-pawn":
+				return images[7];
+			case "black-knight-left":
+				return images[8];
+			case "black-knight-right":
+				return images[9];
+			case "black-rook":
+				return images[10];
+			case "black-bishop":
+				return images[11];
+			case "black-queen":
+				return images[12];
+			case "black-king":
+				return images[13];
+			} return null;
+		}
     
 	public static Piece getPiece(int xPosition, int yPosition) {
 		if ((xPosition < 0) || (yPosition < 0) || (xPosition > 7) || (yPosition > 7)) {
@@ -237,27 +234,27 @@ public class Main {
 			
 		}); panel.addMouseMotionListener(new MouseMotionListener() {
 			
-				public void mouseDragged(MouseEvent e) {
-					
-					int boardSize = tileSize * 8;
-					int startX = (panel.getWidth() - boardSize) / 2;
-					int startY = (panel.getHeight() - boardSize) / 2;
-					
-					mouseXPixelPosition = e.getX();
-					mouseYPixelPosition = e.getY();
-					
-					int mouseXTile = Math.round((mouseXPixelPosition-startX)/tileSize);
-					int mouseYTile = Math.round((mouseYPixelPosition-startY)/tileSize);
-					
-					if (selectedPiece != null) {
-						selectedPiece.xPosition = mouseXTile;
-						selectedPiece.yPosition = mouseYTile;
-						panel.repaint();
-					}
-					
+			public void mouseDragged(MouseEvent e) {
+
+				int boardSize = tileSize * 8;
+				int startX = (panel.getWidth() - boardSize) / 2;
+				int startY = (panel.getHeight() - boardSize) / 2;
+
+				mouseXPixelPosition = e.getX();
+				mouseYPixelPosition = e.getY();
+
+				int mouseXTile = Math.round((mouseXPixelPosition-startX)/tileSize);
+				int mouseYTile = Math.round((mouseYPixelPosition-startY)/tileSize);
+
+				if (selectedPiece != null) {
+					selectedPiece.xPosition = mouseXTile;
+					selectedPiece.yPosition = mouseYTile;
+					panel.repaint();
 				}
-				
-				public void mouseMoved(MouseEvent e) {}
+
+			}
+
+			public void mouseMoved(MouseEvent e) {}
 		});
 	}
 }
