@@ -1,29 +1,25 @@
-package chess;
+package pieces;
 
-import java.util.Iterator;
+import chess.Main;
 import java.util.LinkedList;
 
 public class Piece {
 	
-	int xPosition;
-	int yPosition;
-    int originalX;
-    int originalY;
-	LinkedList<Piece> pieces;
-	String name;
-	boolean isLightPiece;
+	public LinkedList<Piece> pieces;
+	public String name;
+	public int xPosition;
+	public int yPosition;
+	public int originalX;
+	public int originalY;
+	public boolean isLightPiece;
 	public boolean isMoveLegal = true;
-	
-	public boolean isMoveLegal() {
-		return isMoveLegal;
-	}
 	
 	public Piece(int xPosition, int yPosition, String name, boolean isLightPiece, LinkedList<Piece> pieces) {
 		
 		this.xPosition = xPosition;
 		this.yPosition = yPosition;
-	    	this.originalX = xPosition;
-	    	this.originalY = yPosition;
+		this.originalX = xPosition;
+		this.originalY = yPosition;
 		this.pieces = pieces;
 		this.isLightPiece = isLightPiece;
 		this.name = name;
@@ -31,46 +27,43 @@ public class Piece {
 		
 	}
 	
+	public boolean isMoveLegal() {
+		return isMoveLegal;
+	}
+	
 	public void pickUp() {
 		this.originalX = this.xPosition;
 		this.originalY = this.yPosition;
 	}
 	
+	
 	public void move(int xPosition, int yPosition, boolean isLightPiece) {
 		
-		this.isLightPiece = isLightPiece;
+		Piece targetPiece = Main.getPiece(xPosition, yPosition);
 		
-		Iterator<Piece> pieceList = pieces.iterator();
-		Piece piece;
+		if (targetPiece == null) {
+			return;
+		}
 		
-		while (pieceList.hasNext() == true) {
-			piece = pieceList.next();
-			if (piece != null && piece != this) {
-				if ((piece.xPosition == xPosition) && (piece.yPosition == yPosition)) {
-					if ((piece.isLightPiece != isLightPiece)) {
-						pieceList.remove(); 
-						this.xPosition = xPosition;
-						this.yPosition = yPosition;
-						isMoveLegal = true;
-					} else {
-						this.xPosition = originalX;
-						this.yPosition = originalY;
-						isMoveLegal = false;
-						return;
-					}
-				} else {
-					this.xPosition = xPosition;
-					this.yPosition = yPosition;
-				}
+		if ((targetPiece.xPosition == xPosition) && (targetPiece.yPosition == yPosition)) {
+			if ((targetPiece.isLightPiece != isLightPiece)) {
+				pieces.remove(targetPiece); 
+				isMoveLegal = true;
+			} else {
+				isMoveLegal = false;
+				return;
 			}
-		}	
+		} else {
+			this.xPosition = xPosition;
+			this.yPosition = yPosition;
+		}
 		
 		if ((xPosition >= 0 && yPosition >= 0) && (xPosition <= 7 && yPosition <= 7)) {
 			this.originalX = this.xPosition;
 			this.originalY = this.yPosition;
-		}
+			isMoveLegal = true;
+		}	
 		
-		isMoveLegal = true;
-	}	
+	}
 	
 }
