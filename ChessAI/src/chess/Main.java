@@ -11,7 +11,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.LinkedList;
+
 import pieces.Pawn;
+import pieces.Piece;
 
 public class Main {
 	
@@ -21,10 +23,16 @@ public class Main {
 	public static Piece selectedPiece = null;
 	public static Piece targetPiece = null;
 	public boolean isMoveLegal;
+
 	public static int mouseXPixelPosition = 0;
 	public static int mouseYPixelPosition = 0;
+
+	public static int boardSize;
+	public static int xBorderWidth;
+	public static int yBorderHeight;
     
 	public static Image assignImages(Piece piece) {
+
 		switch (piece.name.toLowerCase()) {
 			case "white-pawn":
 				return images[0];
@@ -54,8 +62,9 @@ public class Main {
 				return images[12];
 			case "black-king":
 				return images[13];
-			} return null;
-		}
+
+		} return null;
+	}
     
 	public static Piece getPiece(int xPosition, int yPosition) {
 		if ((xPosition < 0) || (yPosition < 0) || (xPosition > 7) || (yPosition > 7)) {
@@ -125,9 +134,9 @@ public class Main {
 				g.setColor(backgroundColor);
 				g.fillRect(0, 0, width, height);
 				
-				int boardSize = tileSize * 8;
-				int xBorderWidth = (getWidth() - boardSize) / 2;
-				int yBorderHeight = (getHeight() - boardSize) / 2;
+				boardSize = tileSize * 8;
+				xBorderWidth = (getWidth() - boardSize) / 2;
+				yBorderHeight = (getHeight() - boardSize) / 2;
 				
 				for (int x = 0; x < 8; x++) {
 					for (int y = 0; y < 8; y++) {
@@ -144,12 +153,13 @@ public class Main {
 					
 					if (piece != selectedPiece) {
 						// draw selectedPiece last so it can be on the top layer
-							
+
 						int xPixelPosition = (piece.xPosition * tileSize) + xBorderWidth;
 						int yPixelPosition = (piece.yPosition * tileSize) + yBorderHeight;
 						// find tile position then add the size of the background to center pieces
-				        
-				        	g.drawImage(assignImages(piece), xPixelPosition, yPixelPosition, this);
+
+						g.drawImage(assignImages(piece), xPixelPosition, yPixelPosition, this);
+
 					}
 				}
 				
@@ -161,24 +171,19 @@ public class Main {
 		
 		frame.add(panel);
 		frame.setVisible(true);
-		
 		panel.addMouseListener(new MouseListener() {
 			
 			int oldXTile = 0;
 			int oldYTile = 0;
-			
+
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mousePressed(MouseEvent mousePressed) {
 				
-				int boardSize = tileSize * 8;
-				int startX = (panel.getWidth() - boardSize) / 2;
-				int startY = (panel.getHeight() - boardSize) / 2;
+				mouseXPixelPosition = mousePressed.getX();
+				mouseYPixelPosition = mousePressed.getY();
 				
-				mouseXPixelPosition = e.getX();
-				mouseYPixelPosition = e.getY();
-				
-				int mouseXTile = Math.round((mouseXPixelPosition-startX)/tileSize);
-				int mouseYTile = Math.round((mouseYPixelPosition-startY)/tileSize);
+				int mouseXTile = Math.round((mouseXPixelPosition-xBorderWidth)/tileSize);
+				int mouseYTile = Math.round((mouseYPixelPosition-yBorderHeight)/tileSize);
 				
 				oldXTile = mouseXTile;
 				oldYTile = mouseYTile;
@@ -188,17 +193,13 @@ public class Main {
 			}
 			
 			@Override
-			public void mouseReleased(MouseEvent e) {
+			public void mouseReleased(MouseEvent mouseReleased) {
 				
-				int boardSize = tileSize * 8;
-				int startX = (panel.getWidth() - boardSize) / 2;
-				int startY = (panel.getHeight() - boardSize) / 2;
+				mouseXPixelPosition = mouseReleased.getX();
+				mouseYPixelPosition = mouseReleased.getY();
 				
-				mouseXPixelPosition = e.getX();
-				mouseYPixelPosition = e.getY();
-				
-				int mouseXTile = Math.round((mouseXPixelPosition-startX)/tileSize);
-				int mouseYTile = Math.round((mouseYPixelPosition-startY)/tileSize);
+				int mouseXTile = Math.round((mouseXPixelPosition-xBorderWidth)/tileSize);
+				int mouseYTile = Math.round((mouseYPixelPosition-yBorderHeight)/tileSize);
 				
 				targetPiece = getPiece(mouseXTile, mouseYTile);
 				
@@ -230,34 +231,29 @@ public class Main {
 			
 			public void mouseClicked(MouseEvent e) {}
 			public void mouseEntered(MouseEvent e) {}
-			public void mouseExited(MouseEvent e)  {}
+			public void mouseExited (MouseEvent e) {}
 			
 		}); panel.addMouseMotionListener(new MouseMotionListener() {
 			
-			public void mouseDragged(MouseEvent e) {
+			public void mouseDragged(MouseEvent mouseDragged) {
 
-				int boardSize = tileSize * 8;
-				int startX = (panel.getWidth() - boardSize) / 2;
-				int startY = (panel.getHeight() - boardSize) / 2;
-
-				mouseXPixelPosition = e.getX();
-				mouseYPixelPosition = e.getY();
-
-				int mouseXTile = Math.round((mouseXPixelPosition-startX)/tileSize);
-				int mouseYTile = Math.round((mouseYPixelPosition-startY)/tileSize);
-
-				if (selectedPiece != null) {
-					selectedPiece.xPosition = mouseXTile;
-					selectedPiece.yPosition = mouseYTile;
-					panel.repaint();
+				if (selectedPiece == null) {
+					return;
 				}
 
+				mouseXPixelPosition = mouseDragged.getX();
+				mouseYPixelPosition = mouseDragged.getY();
+
+				int mouseXTile = Math.round((mouseXPixelPosition-xBorderWidth)/tileSize);
+				int mouseYTile = Math.round((mouseYPixelPosition-yBorderHeight)/tileSize);
+
+				selectedPiece.xPosition = mouseXTile;
+				selectedPiece.yPosition = mouseYTile;
+
+				panel.repaint();
 			}
 
 			public void mouseMoved(MouseEvent e) {}
 		});
 	}
 }
-
-
-
