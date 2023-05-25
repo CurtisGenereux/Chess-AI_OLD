@@ -24,8 +24,8 @@ public class Main {
 	public static Piece targetPiece = null;
 	public boolean isMoveLegal;
 
-	public static int mouseXPixelPosition = 0;
-	public static int mouseYPixelPosition = 0;
+	public static int mouseXPixel = 0;
+	public static int mouseYPixel = 0;
 
 	public static int boardSize;
 	public static int xBorderWidth;
@@ -153,24 +153,27 @@ public class Main {
 					
 					if (piece != selectedPiece) {
 						// draw selectedPiece last so it can be on the top layer
-
+							
 						int xPixelPosition = (piece.xPosition * tileSize) + xBorderWidth;
-						int yPixelPosition = (piece.yPosition * tileSize) + yBorderHeight;
-						// find tile position then add the size of the background to center pieces
-
-						g.drawImage(assignImages(piece), xPixelPosition, yPixelPosition, this);
+				        int yPixelPosition = (piece.yPosition * tileSize) + yBorderHeight;
+				        // find tile position then add the size of the background to center pieces
+				        
+				        g.drawImage(assignImages(piece), xPixelPosition, yPixelPosition, this);
 
 					}
 				}
 				
 				if (selectedPiece != null) {
-					g.drawImage(assignImages(selectedPiece), mouseXPixelPosition-(tileSize/2), mouseYPixelPosition-(tileSize/2), null);
+					g.drawImage(assignImages(selectedPiece), mouseXPixel-(tileSize/2), mouseYPixel-(tileSize/2), null);
 				}
+				
 			}
+
 		};
 		
 		frame.add(panel);
 		frame.setVisible(true);
+		
 		panel.addMouseListener(new MouseListener() {
 			
 			int oldXTile = 0;
@@ -179,11 +182,11 @@ public class Main {
 			@Override
 			public void mousePressed(MouseEvent mousePressed) {
 				
-				mouseXPixelPosition = mousePressed.getX();
-				mouseYPixelPosition = mousePressed.getY();
+				mouseXPixel = mousePressed.getX();
+				mouseYPixel = mousePressed.getY();
 				
-				int mouseXTile = Math.round((mouseXPixelPosition-xBorderWidth)/tileSize);
-				int mouseYTile = Math.round((mouseYPixelPosition-yBorderHeight)/tileSize);
+				int mouseXTile = Math.round((mouseXPixel-xBorderWidth)/tileSize);
+				int mouseYTile = Math.round((mouseYPixel-yBorderHeight)/tileSize);
 				
 				oldXTile = mouseXTile;
 				oldYTile = mouseYTile;
@@ -195,11 +198,11 @@ public class Main {
 			@Override
 			public void mouseReleased(MouseEvent mouseReleased) {
 				
-				mouseXPixelPosition = mouseReleased.getX();
-				mouseYPixelPosition = mouseReleased.getY();
+				mouseXPixel = mouseReleased.getX();
+				mouseYPixel = mouseReleased.getY();
 				
-				int mouseXTile = Math.round((mouseXPixelPosition-xBorderWidth)/tileSize);
-				int mouseYTile = Math.round((mouseYPixelPosition-yBorderHeight)/tileSize);
+				int mouseXTile = Math.round((mouseXPixel-xBorderWidth)/tileSize);
+				int mouseYTile = Math.round((mouseYPixel-yBorderHeight)/tileSize);
 				
 				targetPiece = getPiece(mouseXTile, mouseYTile);
 				
@@ -209,8 +212,8 @@ public class Main {
 				
 				selectedPiece.move(mouseXTile, mouseYTile, selectedPiece.isLightPiece);
 
-				if (mouseXTile >= 0 && mouseYTile >= 0 && mouseXTile <= 7 && mouseYTile <= 7 && selectedPiece.isMoveLegal) {
-					if (selectedPiece.isMoveLegal) {
+				if (mouseXTile >= 0 && mouseYTile >= 0 && mouseXTile <= 7
+				&& mouseYTile <= 7 && selectedPiece.isMoveLegal) {
 						selectedPiece.move(mouseXTile, mouseYTile, selectedPiece.isLightPiece);
 						if (selectedPiece.isMoveLegal) {
 							board[mouseXTile][mouseYTile] = selectedPiece;
@@ -218,7 +221,6 @@ public class Main {
 								board[oldXTile][oldYTile] = null;
 							}
 						}
-					}
 
 				} else {
 					selectedPiece.move(oldXTile, oldYTile, selectedPiece.isLightPiece);
@@ -241,11 +243,11 @@ public class Main {
 					return;
 				}
 
-				mouseXPixelPosition = mouseDragged.getX();
-				mouseYPixelPosition = mouseDragged.getY();
+				mouseXPixel = mouseDragged.getX();
+				mouseYPixel = mouseDragged.getY();
 
-				int mouseXTile = Math.round((mouseXPixelPosition-xBorderWidth)/tileSize);
-				int mouseYTile = Math.round((mouseYPixelPosition-yBorderHeight)/tileSize);
+				int mouseXTile = Math.round((mouseXPixel-xBorderWidth)/tileSize);
+				int mouseYTile = Math.round((mouseYPixel-yBorderHeight)/tileSize);
 
 				selectedPiece.xPosition = mouseXTile;
 				selectedPiece.yPosition = mouseYTile;
