@@ -212,15 +212,14 @@ public class Main {
 				
 				selectedPiece.move(mouseXTile, mouseYTile, selectedPiece.isLightPiece);
 
-				if (mouseXTile >= 0 && mouseYTile >= 0 && mouseXTile <= 7
-				&& mouseYTile <= 7 && selectedPiece.isMoveLegal) {
-						selectedPiece.move(mouseXTile, mouseYTile, selectedPiece.isLightPiece);
-						if (selectedPiece.isMoveLegal) {
-							board[mouseXTile][mouseYTile] = selectedPiece;
-							if (mouseXTile != oldXTile || mouseYTile != oldYTile) {
-								board[oldXTile][oldYTile] = null;
-							}
+				if (selectedPiece.isMoveLegal) {
+					selectedPiece.move(mouseXTile, mouseYTile, selectedPiece.isLightPiece);
+					if (selectedPiece.isMoveLegal) {
+						board[mouseXTile][mouseYTile] = selectedPiece;
+						if (mouseXTile != oldXTile || mouseYTile != oldYTile) {
+							board[oldXTile][oldYTile] = null;
 						}
+					}
 
 				} else {
 					selectedPiece.move(oldXTile, oldYTile, selectedPiece.isLightPiece);
