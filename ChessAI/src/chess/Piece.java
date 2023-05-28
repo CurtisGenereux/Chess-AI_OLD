@@ -39,74 +39,40 @@ public class Piece {
 	
 	public void move(int xPosition, int yPosition, boolean isLightPiece) {
 		
-		isMoveLegal = isBaseMoveLegal();
-		System.out.println(isMoveLegal);
+		isMoveLegal = isMoveLegalCheck();
 		
 		Piece targetPiece = Main.getPiece(xPosition, yPosition);
 		
-		//bounds or your color => move back; illegal;
-		//piece there => move + kill; legal;
-		//piece not there => move; legal;
-		
 		if (!isMoveLegal) {
-			return;
-		}
-		
-		if ((targetPiece.xPosition == xPosition) && (targetPiece.yPosition == yPosition)) {
-			pieces.remove(targetPiece);
-			this.xPosition = xPosition;
-			this.yPosition = yPosition;
-		} else {
-			this.xPosition = xPosition;
-			this.yPosition = yPosition;
-		}
-		
-		
-		/*
-		if ((targetPiece.xPosition == xPosition) && (targetPiece.yPosition == yPosition)) {
-			pieces.remove(targetPiece);
+			this.xPosition = originalX;
+			this.yPosition = originalY;
 			this.xPosition = xPosition;
 			this.yPosition = yPosition;
 			return;
-		
-		} else {
-			this.xPosition = xPosition;
-			this.yPosition = yPosition;
 		}
-		
-		this.xPosition = xPosition;
-		this.yPosition = yPosition;
-		
-		
-		
-		if ((xPosition >= 0 && yPosition >= 0) && (xPosition <= 7 && yPosition <= 7)) {
-			this.originalX = this.xPosition;
-			this.originalY = this.yPosition;
-			isMoveLegal = true;
-		}	
 		
 		if (targetPiece == null) {
+			this.xPosition = xPosition;
+			this.yPosition = yPosition;
 			return;
 		}
 		
 		if ((targetPiece.xPosition == xPosition) && (targetPiece.yPosition == yPosition)) {
-			if ((targetPiece.isLightPiece != isLightPiece)) {
-				pieces.remove(targetPiece); 
-				isMoveLegal = true;
-			} else {
-				isMoveLegal = false;
-				return;
-			}
-		} else {
+			pieces.remove(targetPiece);
 			this.xPosition = xPosition;
 			this.yPosition = yPosition;
 		}
-
-		*/
-	
+		
 	}
 	
-	public boolean isBaseMoveLegal() {
+	
+	public boolean areUniqueMovesLegalCheck() {
+		
+		return false;
+		
+	}
+	
+	public boolean isMoveLegalCheck() {
 		
 		Piece targetPiece = Main.getPiece(xPosition, yPosition);
 		
@@ -134,10 +100,6 @@ public class Piece {
 		}
 		
 		return false;
-		
-	}
-	
-	public void checkIfMoveLegal() {
 		
 	}
 	
