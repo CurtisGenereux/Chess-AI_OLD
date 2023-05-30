@@ -91,32 +91,32 @@ public class Main {
 		String[] imageNames = {"pawn", "knight-left", "knight-right", "rook", "bishop", "queen", "king"};
 		
 		for (int i = 0; i < 7; i++) {
-			images[i] = imageLoader.loadImage("black-" + imageNames[i], tileSize);
+			images[i] = imageLoader.loadImage("white-" + imageNames[i], tileSize);
 		} int imageIndex = 0;
 		for (int i = 7; i < 14; i++) {
-			images[i] = imageLoader.loadImage("white-" + imageNames[imageIndex], tileSize);
+			images[i] = imageLoader.loadImage("black-" + imageNames[imageIndex], tileSize);
 			imageIndex++;
 		}
 	
 		// asign pieces
 		for (int i = 0; i < 8; i++) {
-		    Pawn whitePawn = new Pawn(i, 1, "white-pawn", true, pieces);
-		    Pawn blackPawn = new Pawn(i, 6, "black-pawn", false, pieces);
+		    Pawn whitePawn = new Pawn(i, 6, "white-pawn", true, pieces);
+		    Pawn blackPawn = new Pawn(i, 1, "black-pawn", false, pieces);
 		    pieces.add(whitePawn);
 		    pieces.add(blackPawn);
-		    board[i][1] = whitePawn;
-		    board[i][6] = blackPawn;
+		    board[i][6] = whitePawn;
+		    board[i][1] = blackPawn;
 		}
 
 		String[] pieceNames = {"rook", "knight-right", "bishop", "queen", "king", "bishop", "knight-left", "rook"};
 
 		for (int i = 0; i < 8; i++) {
-			Piece whitePiece = new Piece(i, 0, "white-" + pieceNames[i], true, pieces);
-			Piece blackPiece = new Piece(i, 7, "black-" + pieceNames[i], false, pieces);
+			Piece whitePiece = new Piece(i, 7, "white-" + pieceNames[i], true, pieces);
+			Piece blackPiece = new Piece(i, 0, "black-" + pieceNames[i], false, pieces);
 			pieces.add(whitePiece);
 			pieces.add(blackPiece);
-			board[i][0] = whitePiece;
-			board[i][7] = blackPiece;
+			board[i][7] = whitePiece;
+			board[i][0] = blackPiece;
 		}
 
 		Color baishe = new Color (241, 216, 179); //legal: -50, -0, -25; //current: -0, -125,  -75;
@@ -211,7 +211,9 @@ public class Main {
 				}
 				
 				selectedPiece.move(mouseXTile, mouseYTile, selectedPiece.isLightPiece);
-
+				System.out.println("selected piece color: " + selectedPiece.isLightPiece);
+				
+				
 				if (selectedPiece.isMoveLegal) {
 					selectedPiece.move(mouseXTile, mouseYTile, selectedPiece.isLightPiece);
 					if (selectedPiece.isMoveLegal) {
