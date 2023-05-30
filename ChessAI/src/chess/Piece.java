@@ -31,7 +31,7 @@ public class Piece {
 		return isMoveLegal;
 	}
 	
-	public void pickUp() {
+	public void updateOriginalPosition() {
 		this.originalX = this.xPosition;
 		this.originalY = this.yPosition;
 	}
