@@ -40,7 +40,10 @@ public class Piece {
 	public void move(int xPosition, int yPosition, boolean isLightPiece) {
 		
 		isMoveLegal = isMoveLegalCheck();
-		
+		if (isMoveLegal) {
+			isMoveLegal = checkLegalUniqueMoves();
+		}
+
 		Piece targetPiece = Main.getPiece(xPosition, yPosition);
 		
 		if (!isMoveLegal) {
@@ -65,11 +68,8 @@ public class Piece {
 		
 	}
 	
-	
-	public boolean areUniqueMovesLegalCheck() {
-		
+	public boolean checkLegalUniqueMoves() {
 		return false;
-		
 	}
 	
 	public boolean isMoveLegalCheck() {
@@ -78,7 +78,6 @@ public class Piece {
 		
 		if (targetPiece == null) {
 			if (xPosition < 0 || yPosition < 0 || xPosition > 7 || yPosition > 7) {
-				System.out.println("false + bounds");
 				return false;
 			} else {
 				return true;
