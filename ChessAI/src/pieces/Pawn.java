@@ -11,53 +11,38 @@ public class Pawn extends Piece {
 		super(xPosition, yPosition, name, isLightPiece, pieces);
 	}
 	
-	LinkedList<int[]> legalMoveList = new LinkedList<>();
-	
-	public boolean checkLegalUniqueMoves() {
+	public void checkUniqueMoves() {
 		
-		System.out.println("N: [" + xPosition + "," + yPosition + "]");
-		System.out.println("O: [" + originalX + "," + originalY + "]");
-		
-		int legalMoveCount = 0;
-		
-		int[] legalMoves = {};
-		
-		Piece targetPiece = Main.getPiece(xPosition, yPosition);
-		
+		LegalMove move;
+
 		if (isLightPiece) {
 			if (originalY == 6) {
-				if ((Main.getPiece(originalX, originalY - 2) == null)
-				|| (!Main.getPiece(originalX, originalY - 2).isLightPiece)) {
-					int[] move = {originalX, originalY - 2};
+				if (xPosition == originalX && yPosition == originalY - 2) {
+					move = new LegalMove(originalX, originalY - 2);
 					legalMoveList.add(move);
-				} else {
-				if (Main.getPiece(originalX, originalY - 1) == null
-				|| (!Main.getPiece(originalX, originalY - 1).isLightPiece)) {
-					}
 				}
+			}
+			if (xPosition == originalX && yPosition == originalY - 1) {
+				move = new LegalMove(originalX, originalY - 1);
+				legalMoveList.add(move);
 			}
 
 		} else {
-			if ((Main.getPiece(originalX, originalY + 2) == null)
-			|| (Main.getPiece(originalX, originalY + 2).isLightPiece)) {
-				int[] move = {originalX, originalY + 2};
-				legalMoveList.add(move);
-			} else {
-			if (Main.getPiece(originalX, originalY + 1) == null
-			|| (Main.getPiece(originalX, originalY + 1).isLightPiece)) {
+			if (originalY == 1) {
+				if (xPosition == originalX && yPosition == originalY + 2) {
+					move = new LegalMove(originalX, originalY + 2);
+					legalMoveList.add(move);
 				}
+			}
+			if (xPosition == originalX && yPosition == originalY + 1) {
+				move = new LegalMove(originalX, originalY + 1);
+				legalMoveList.add(move);
 			}
 		}
 		
 		updateOriginalPosition();
 		
-		for (int[] move : legalMoveList) {
-			System.out.println(move);
-		}
-		
-
-		return true;
+		System.out.println("b4");
 		
 	}
 }
-		
