@@ -192,6 +192,10 @@ public class Main {
 				oldYTile = mouseYTile;
 				
 				selectedPiece = getPiece(mouseXTile, mouseYTile);
+				
+				if (selectedPiece != null) {
+					selectedPiece.checkLegalUniqueMoves();
+				}
 
 			}
 			
