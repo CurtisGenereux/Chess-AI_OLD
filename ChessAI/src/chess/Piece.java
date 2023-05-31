@@ -1,105 +1,48 @@
 package pieces;
 
-import chess.Main;
 import java.util.LinkedList;
+import java.util.Iterator;
 
-public class Piece {
-	
-	public LinkedList<Piece> pieces;
-	public String name;
-	public int xPosition;
-	public int yPosition;
-	public int originalX;
-	public int originalY;
-	public boolean isLightPiece;
-	public boolean isMoveLegal = true;
-	
-	public Piece(int xPosition, int yPosition, String name, boolean isLightPiece, LinkedList<Piece> pieces) {
-		
-		this.xPosition = xPosition;
-		this.yPosition = yPosition;
-		this.originalX = xPosition;
-		this.originalY = yPosition;
-		this.pieces = pieces;
-		this.isLightPiece = isLightPiece;
-		this.name = name;
-		pieces.add(this);
-		
-	}
-	
-	public boolean isMoveLegal() {
-		return isMoveLegal;
-	}
-	
-	public void updateOriginalPosition() {
-		this.originalX = this.xPosition;
-		this.originalY = this.yPosition;
-	}
-	
-	
-	public void move(int xPosition, int yPosition, boolean isLightPiece) {
-		
-		isMoveLegal = isMoveLegalCheck();
-		if (isMoveLegal) {
-			isMoveLegal = checkLegalUniqueMoves();
-		}
+import chess.Main;
 
-		Piece targetPiece = Main.getPiece(xPosition, yPosition);
-		
-		if (!isMoveLegal) {
-			this.xPosition = originalX;
-			this.yPosition = originalY;
-			this.xPosition = xPosition;
-			this.yPosition = yPosition;
-			return;
-		}
-		
-		if (targetPiece == null) {
-			this.xPosition = xPosition;
-			this.yPosition = yPosition;
-			return;
-		}
-		
-		if ((targetPiece.xPosition == xPosition) && (targetPiece.yPosition == yPosition)) {
-			pieces.remove(targetPiece);
-			this.xPosition = xPosition;
-			this.yPosition = yPosition;
-		}
-		
+public class Pawn extends Piece {
+	
+	public Pawn(int xPosition, int yPosition, String name, boolean isLightPiece, LinkedList<Piece> pieces) {
+		super(xPosition, yPosition, name, isLightPiece, pieces);
 	}
 	
-	public boolean checkLegalUniqueMoves() {
-		return false;
-	}
-	
-	public boolean isMoveLegalCheck() {
+	public void checkUniqueMoves() {
 		
-		Piece targetPiece = Main.getPiece(xPosition, yPosition);
-		
-		if (targetPiece == null) {
-			if (xPosition < 0 || yPosition < 0 || xPosition > 7 || yPosition > 7) {
-				return false;
-			} else {
-				return true;
+		LegalMove move;
+
+		if (isLightPiece) {
+			if (originalY == 6) {
+				if (xPosition == originalX && yPosition == originalY - 2) {
+					move = new LegalMove(originalX, originalY - 2);
+					legalMoveList.add(move);
+				}
+			}
+			if (xPosition == originalX && yPosition == originalY - 1) {
+				move = new LegalMove(originalX, originalY - 1);
+				legalMoveList.add(move);
+			}
+
+		} else {
+			if (originalY == 1) {
+				if (xPosition == originalX && yPosition == originalY + 2) {
+					move = new LegalMove(originalX, originalY + 2);
+					legalMoveList.add(move);
+				}
+			}
+			if (xPosition == originalX && yPosition == originalY + 1) {
+				move = new LegalMove(originalX, originalY + 1);
+				legalMoveList.add(move);
 			}
 		}
 		
-		if ((targetPiece.xPosition != xPosition) || (targetPiece.yPosition != yPosition)) {
-			if (xPosition < 0 || yPosition < 0 || xPosition > 7 || yPosition > 7) {
-				return false;
-			}
-		}
+		updateOriginalPosition();
 		
-		if ((targetPiece.xPosition == xPosition) && (targetPiece.yPosition == yPosition)) {
-			if ((targetPiece.isLightPiece != isLightPiece)) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-		
-		return false;
+		System.out.println("b4");
 		
 	}
-	
 }
