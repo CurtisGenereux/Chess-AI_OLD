@@ -194,10 +194,14 @@ public class Main {
 
 					}
 				}
-				
+
 				for (Piece piece: pieces) {
-					
+
 					if (piece != selectedPiece) {
+						
+						if ((piece.xPosition * tileSize) == 0 && (piece.yPosition * tileSize) == 0) {
+							System.out.println("piece is the piece bruh wth");
+						}
 						// draw selectedPiece last so it can be on the top layer
 							
 						int xPixelPosition = (piece.xPosition * tileSize) + xBorderWidth;
@@ -245,6 +249,7 @@ public class Main {
 			
 				if (selectedPiece != null) {
 					selectedPiece.fillMoveList();
+					selectedPiece.fillMoveList();
 					panel.repaint();
 				}
 				
@@ -276,11 +281,14 @@ public class Main {
 					board[mouseXTile][mouseYTile] = selectedPiece;
 					if (mouseXTile != oldXTile || mouseYTile != oldYTile) {
 						board[oldXTile][oldYTile] = null;
+						pieces.remove(targetPiece);
 					}
 
 				} else {
 					selectedPiece.move(oldXTile, oldYTile);
 				}
+				
+				selectedPiece.clearMoveList();
 				
 				selectedPiece = null;
 				panel.repaint();
