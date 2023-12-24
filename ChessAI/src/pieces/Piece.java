@@ -1,131 +1,53 @@
 package pieces;
 
-import chess.Main;
 import java.util.LinkedList;
 
-public class Piece {
-	
-	public LinkedList<Piece> pieces;
-	public String name;
-	public int xPosition;
-	public int yPosition;
-	public int originalX;
-	public int originalY;
-	public boolean isLightPiece;
-	public boolean isMoveLegal = true;
-	public static LinkedList<LegalMove> legalMoveList = new LinkedList<>();
-	
-	public Piece(int xPosition, int yPosition, String name, boolean isLightPiece, LinkedList<Piece> pieces) {
-		
-		this.xPosition = xPosition;
-		this.yPosition = yPosition;
-		this.originalX = xPosition;
-		this.originalY = yPosition;
-		this.pieces = pieces;
-		this.isLightPiece = isLightPiece;
-		this.name = name;
-		pieces.add(this);
-		
-	}
+import chess.Main;
 
-	public Piece() {
-		// TODO Auto-generated constructor stub
-	}
-
-	public boolean isMoveLegal() {
-		return isMoveLegal;
-	}
+public class Pawn extends Piece {
 	
-	public void updateOriginalPosition() {
-		this.originalX = this.xPosition;
-		this.originalY = this.yPosition;
-	}
-	
-	public void move(int xPosition, int yPosition) {
-
-		isMoveLegal = isMoveLegalCheck();
-		if (isMoveLegal) {
-			isMoveLegal = checkLegalUniqueMoves();
-		}
-
-		legalMoveList.clear();
-		
-		System.out.println("list has been cleared!");
-		
-		Piece targetPiece = Main.getPiece(xPosition, yPosition);
-		
-		if (!isMoveLegal) {
-			this.xPosition = originalX;
-			this.yPosition = originalY;
-			this.xPosition = xPosition;
-			this.yPosition = yPosition;
-			return;
-		}
-		
-		if (targetPiece == null) {
-			this.xPosition = xPosition;
-			this.yPosition = yPosition;
-			return;
-		}
-		
-		if ((targetPiece.xPosition == xPosition) && (targetPiece.yPosition == yPosition)) {
-			pieces.remove(targetPiece);
-			this.xPosition = xPosition;
-			this.yPosition = yPosition;
-		}
-		
+	public Pawn(int xPosition, int yPosition, String name, boolean isLightPiece, LinkedList<Piece> pieces) {
+		super(xPosition, yPosition, name, isLightPiece, pieces);
 	}
 	
 	public void fillMoveList() {
 		
-	}
+		legalMoveList.clear();
+		
+		System.out.println("list is empty " + legalMoveList.isEmpty());
+		
+		LegalMove move;
+		
+		if (isLightPiece) {
+			if (originalY == 6) {
+				move = new LegalMove(originalX, originalY - 2);
+				legalMoveList.add(move);
+				System.out.println("adding a move!");
+			}
+			if (Main.getPiece(originalX, originalY - 1) == null) {
+				move = new LegalMove(originalX, originalY - 1);
+				legalMoveList.add(move);
+				System.out.println("adding a move!");
+			}
+			
+			if ((Main.getPiece(originalX + 1, originalY - 1) != null) 
+			&& (Main.getPiece(originalX + 1, originalY - 1).isLightPiece == false)) {	
+				move = new LegalMove(originalX + 1, originalY - 1);
+				legalMoveList.add(move);
+				System.out.println("adding a move!");
+			}
+			if ((Main.getPiece(originalX - 1, originalY - 1) != null) 
+			&& (Main.getPiece(originalX - 1, originalY - 1).isLightPiece == false)) {
+				move = new LegalMove(originalX - 1, originalY - 1);
+				legalMoveList.add(move);
+				System.out.println("adding a move!");
+			}
+ 
+		}
 	
-	public boolean checkLegalUniqueMoves() {
-		
-		System.out.println("========================================");
-		for (LegalMove legalMove : legalMoveList) {
-			if (xPosition == legalMove.xPosition && yPosition == legalMove.yPosition) {
-				System.out.println("the move to: [" + xPosition + "," + yPosition + "] should be legal");
-				return true;
-			}
-			System.out.println("[" + xPosition + "," + yPosition + "]" + "and " + "[" + legalMove.xPosition + "," + legalMove.yPosition + "]" + "do not match");
-		}
-		
-		System.out.println("is the list empty? " + legalMoveList.isEmpty());
-		System.out.println("bruh moment");
-		System.out.println(false);
-		
-		return false;
-	}
-	
-	public boolean isMoveLegalCheck() {
-		
-		Piece targetPiece = Main.getPiece(xPosition, yPosition);
-		
-		if (targetPiece == null) {
-			if (xPosition < 0 || yPosition < 0 || xPosition > 7 || yPosition > 7) {
-				return false;
-			} else {
-				return true;
-			}
-		}
-		
-		if ((targetPiece.xPosition != xPosition) || (targetPiece.yPosition != yPosition)) {
-			if (xPosition < 0 || yPosition < 0 || xPosition > 7 || yPosition > 7) {
-				return false;
-			}
-		}
-		
-		if ((targetPiece.xPosition == xPosition) && (targetPiece.yPosition == yPosition)) {
-			if ((targetPiece.isLightPiece != isLightPiece)) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-		
-		return false;
+		System.out.println("legalMoveList.size " + legalMoveList.size());
+
+		updateOriginalPosition();
 		
 	}
-	
 }
